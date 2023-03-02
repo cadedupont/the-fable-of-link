@@ -18,7 +18,6 @@ public class Game extends JFrame {
 		view.addMouseListener(controller);
 		this.addKeyListener(controller);
 
-		this.setTitle("A3 - Map Editor");
 		// size of window to perfectly fit tiles differs based on operating system (top padding with title / exit button, aspect ratio?)
 		this.setSize(700, 525); // Mac
 		// this.setSize(716, 539); // Windows
@@ -33,11 +32,17 @@ public class Game extends JFrame {
 
 	public void run() {
 		while (true) {
-			controller.update(); // calling update for smooth scrolling with arrow keys
-			view.repaint(); // indirectly calling View.paintComponent
-			Toolkit.getDefaultToolkit().sync(); // update screen
+			controller.update(); 
+			// model.update();
+			view.repaint(); 
+
+			// setting title to indicate whether edit mode is currently on
+			this.setTitle("A4 - Collision Detection " + (controller.editOn ? "(edit mode ON)" : "(edit mode OFF)"));
+
+			// update screen
+			Toolkit.getDefaultToolkit().sync();
 			
-			// sleep for 40 milliseconds (25 FPS)
+			// sleep for 16 milliseconds (~60 FPS)
 			try {
 				Thread.sleep(16);
 			} catch (Exception e) {

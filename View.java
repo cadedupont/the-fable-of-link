@@ -8,12 +8,14 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.awt.Color;
+import java.awt.Image;
 
 class View extends JPanel {
 	static final int minWidth = 0, minHeight = 0, maxWidth = 700, maxHeight = 500;
 	int scroll_x, scroll_y;
 	BufferedImage cyanTile, greenTile, magentaTile, redTile;
 	Model model;
+	Image[] links;
 
 	public View(Controller c, Model m) {
 		this.model = m;
@@ -29,6 +31,25 @@ class View extends JPanel {
 			e.printStackTrace(System.err);
 			System.exit(1);
 		}
+
+		// load tile images onto screen
+		model.unmarshal(Json.load("map.json"));
+
+		// load link images into array
+		links = new Image[50];
+		for (int i = 0; i < links.length; i++)
+			links[i] = (i + 1 < 10) ? loadImage("link0" + (i + 1) + ".png") : loadImage("link" + (i + 1) + ".png");
+	}
+
+	private Image loadImage(String filename) {
+		Image image = null;
+		try {
+			image = ImageIO.read(new File(filename));
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			System.exit(1);
+		}
+		return image;
 	}
 
 	public void paintComponent(Graphics g) {

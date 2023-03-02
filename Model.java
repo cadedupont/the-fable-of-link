@@ -6,10 +6,26 @@ import java.util.ArrayList;
 
 public class Model {
 	ArrayList<Tile> tiles;
+	Link link;
 
 	public Model() {
 		tiles = new ArrayList<Tile>();
 	}
+
+	public void update() {
+		link.update();
+	}
+
+	// public boolean isColliding() {
+	// 	boolean colliding = true;
+	// 	for (Tile tile : tiles) {
+	// 		// if (link.right < tile.left) colliding = false;
+	// 		// if (link.left > tile.right) colliding = false;
+	// 		// if (link.bottom < tile.top) colliding = false;
+	// 		// if (link.top > tile.bottom) colliding = false;
+	// 	}
+	// 	return colliding;
+	// }
 
 	public Json marshal() {
 		Json ob = Json.newObject();

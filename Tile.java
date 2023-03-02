@@ -26,4 +26,9 @@ public class Tile {
         ob.add("y", y);
         return ob;
     }
+
+    @Override
+    public String toString() {
+        return ("Tile (x, y) = (" + this.x + ", " + this.y + ")");
+    }
 }
