@@ -10,22 +10,21 @@ public class Model {
 
 	public Model() {
 		tiles = new ArrayList<Tile>();
+		link = new Link();
 	}
 
 	public void update() {
 		link.update();
 	}
 
-	// public boolean isColliding() {
-	// 	boolean colliding = true;
-	// 	for (Tile tile : tiles) {
-	// 		// if (link.right < tile.left) colliding = false;
-	// 		// if (link.left > tile.right) colliding = false;
-	// 		// if (link.bottom < tile.top) colliding = false;
-	// 		// if (link.top > tile.bottom) colliding = false;
-	// 	}
-	// 	return colliding;
-	// }
+	public boolean isColliding() {
+		// if Link isn't not colliding with a tile, return true, otherwise return false
+		for (Tile tile : tiles)
+			if (!(link.x + link.width < tile.x || link.x > Tile.width + tile.x
+				|| link.y + link.height < tile.y || link.y + (link.height / 2) > Tile.height + tile.y))
+				return true;
+		return false;
+	}
 
 	public Json marshal() {
 		Json ob = Json.newObject();

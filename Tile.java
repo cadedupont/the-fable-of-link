@@ -11,6 +11,11 @@ public class Tile {
         this.y = y;
     }
 
+    @Override
+    public String toString() {
+        return ("Tile (x, y) = (" + this.x + ", " + this.y + ")");
+    }
+
     public Tile(Json ob) {
         this.x = (int) ob.getLong("x");
         this.y = (int) ob.getLong("y");
@@ -25,10 +30,5 @@ public class Tile {
         ob.add("x", x);
         ob.add("y", y);
         return ob;
-    }
-
-    @Override
-    public String toString() {
-        return ("Tile (x, y) = (" + this.x + ", " + this.y + ")");
     }
 }

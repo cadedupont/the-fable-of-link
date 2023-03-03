@@ -38,7 +38,7 @@ class View extends JPanel {
 		// load link images into array
 		links = new Image[50];
 		for (int i = 0; i < links.length; i++)
-			links[i] = (i + 1 < 10) ? loadImage("link0" + (i + 1) + ".png") : loadImage("link" + (i + 1) + ".png");
+			links[i] = loadImage("link" + (i + 1) + ".png");
 	}
 
 	private Image loadImage(String filename) {
@@ -58,7 +58,7 @@ class View extends JPanel {
 		int right = maxWidth - scroll_x;
 		int top = minHeight - scroll_y;
 		int bottom = maxHeight - scroll_y;
-
+		
 		// green, top left quadrant
 		g.setColor(new Color(146, 220, 167));
 		g.fillRect(left, top, maxWidth, maxHeight);
@@ -85,5 +85,7 @@ class View extends JPanel {
 			if (tile.x < maxWidth && tile.y >= maxHeight) g.drawImage(magentaTile, x, y, null);
 			if (tile.x >= maxWidth && tile.y >= maxHeight) g.drawImage(cyanTile, x, y, null);
 		}
+
+		g.drawImage(links[0], model.link.x - scroll_x, model.link.y - scroll_y, null);
 	}
 }
