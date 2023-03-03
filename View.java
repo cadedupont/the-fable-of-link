@@ -52,8 +52,8 @@ class View extends JPanel {
 		return image;
 	}
 
-	// @todo add text for edit mode
-	// @body add text to screen to indicate to user that editOn in Controller is currently true
+	// TODO: add text for edit mode
+	// add text to screen to indicate to user that editOn in Controller is currently true
 	public void paintComponent(Graphics g) {
 		// calculate current positions of quadrants for setting background color
 		int left = minWidth - scroll_x;
