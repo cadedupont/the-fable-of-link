@@ -25,10 +25,8 @@ class Controller implements MouseListener, KeyListener {
 	public void update() {
 		// if Link is colliding with a tile, snap Link to adjacent side of tile
 
-		// TODO: fix Link's position
-		// add functionality for snapping Link's position to be adjacent to side of tile he's currently colliding with
-		if (model.isColliding()) System.out.println("hello"); //model.link.stopColliding();
-		else System.out.println("not hello");
+		// TODO: #2 Fix Link's position if colliding with tile
+		if (model.isColliding()) //model.link.stopColliding();
 
 		// if movement key is being pressed, then update Link's position
 		if (keyUp) model.link.y -= model.link.speed;
