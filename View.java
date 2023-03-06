@@ -11,17 +11,25 @@ import java.awt.Color;
 import java.awt.Image;
 
 class View extends JPanel {
-	static final int minWidth = 0, minHeight = 0, maxWidth = 700, maxHeight = 500;
-	int scroll_x, scroll_y;
-	BufferedImage cyanTile, greenTile, magentaTile, redTile;
 	Model model;
+
+	// Integers for window width and height, use when performing movement operations
+	public static final int minWidth = 0, minHeight = 0, maxWidth = 700, maxHeight = 500;
+
+	// Integers to store window's scroll position
+	int scroll_x, scroll_y;
+
+	// BufferedImage variables for various tile images
+	BufferedImage cyanTile, greenTile, magentaTile, redTile;
+	
+	// Array of Link images
 	Image[] links;
 
 	public View(Controller c, Model m) {
 		this.model = m;
 		c.setView(this);
 		
-		// load tile images into memory
+		// Load tile images into memory
 		try {
 			this.greenTile = ImageIO.read(new File("green_tile.jpg"));
 			this.redTile = ImageIO.read(new File("red_tile.jpg"));
@@ -32,16 +40,17 @@ class View extends JPanel {
 			System.exit(1);
 		}
 
-		// load tile images onto screen
+		// Load tile images onto screen
 		model.unmarshal(Json.load("map.json"));
 
-		// load link images into array
-		links = new Image[50];
-		for (int i = 0; i < links.length; i++)
-			links[i] = loadImage("link" + (i + 1) + ".png");
+		// Load link images into array; ignoring 0th index so indices align with file names
+		links = new Image[51];
+		for (int i = 1; i < links.length; i++)
+			links[i] = loadImage("link" + i + ".png");
 	}
 
-	private Image loadImage(String filename) {
+	// Method for loading image
+	static Image loadImage(String filename) {
 		Image image = null;
 		try {
 			image = ImageIO.read(new File(filename));
@@ -52,31 +61,33 @@ class View extends JPanel {
 		return image;
 	}
 
-	// TODO: #3 add text for edit mode
+	// TODO: #3 Add text for edit mode on window instead of title
+
+	// Method for drawing screen for each frame
 	public void paintComponent(Graphics g) {
-		// calculate current positions of quadrants for setting background color
+		// Calculate current positions of quadrants for setting background color
 		int left = minWidth - scroll_x;
 		int right = maxWidth - scroll_x;
 		int top = minHeight - scroll_y;
 		int bottom = maxHeight - scroll_y;
 		
-		// green, top left quadrant
+		// Green, top left quadrant
 		g.setColor(new Color(146, 220, 167));
 		g.fillRect(left, top, maxWidth, maxHeight);
 
-		// red, top right quadrant
+		// Red, top right quadrant
 		g.setColor(new Color(223, 135, 123));
 		g.fillRect(right, top, maxWidth, maxHeight);
 
-		// magenta, bottom left quadrant
+		// Magenta, bottom left quadrant
 		g.setColor(new Color(213, 140, 234));
 		g.fillRect(left, bottom, maxWidth, maxHeight);
 
-		// cyan, bottom right quadrant
+		// Cyan, bottom right quadrant
 		g.setColor(new Color(129, 227, 240));
 		g.fillRect(right, bottom, maxWidth, maxHeight);
 
-		// place different tile images based on their position
+		// Place different tile images based on their position
 		for (Tile tile : model.tiles) {
 			int x = tile.x - scroll_x;
 			int y = tile.y - scroll_y;
@@ -87,6 +98,6 @@ class View extends JPanel {
 			if (tile.x >= maxWidth && tile.y >= maxHeight) g.drawImage(cyanTile, x, y, null);
 		}
 
-		g.drawImage(links[0], model.link.x - scroll_x, model.link.y - scroll_y, null);
+		g.drawImage(links[1], model.link.x - scroll_x, model.link.y - scroll_y, null);
 	}
 }

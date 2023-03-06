@@ -17,15 +17,7 @@ public class Model {
 		link.update();
 	}
 
-	public boolean isColliding() {
-		// if Link isn't not colliding with a tile, return true, otherwise return false
-		for (Tile tile : tiles)
-			if (!(link.x + link.width < tile.x || link.x > Tile.width + tile.x
-				|| link.y + link.height < tile.y || link.y + (link.height / 2) > Tile.height + tile.y))
-				return true;
-		return false;
-	}
-
+	// Marshal object into Json node, save tile locations to map.json
 	public Json marshal() {
 		Json ob = Json.newObject();
 		Json list = Json.newList();
@@ -37,10 +29,21 @@ public class Model {
 		return ob;
 	}
 
+	// Unmarshal tile location data from map.json, add to ArrayList of tile objects
 	public void unmarshal(Json ob) {
 		tiles = new ArrayList<Tile>();
 		Json list = ob.get("tiles");
 		for (int i = 0; i < list.size(); i++)
 			tiles.add(new Tile(list.get(i)));
+	}
+
+	public boolean isColliding() {
+		// If Link isn't not colliding with a tile, return true
+		// If all tiles have been checked, return false
+		for (Tile tile : tiles)
+			if (!(link.x + link.width < tile.x || link.x > Tile.width + tile.x
+				|| link.y + link.height < tile.y || link.y + (link.height / 2) > Tile.height + tile.y))
+				return true;
+		return false;
 	}
 }

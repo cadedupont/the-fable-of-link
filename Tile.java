@@ -5,6 +5,7 @@
 public class Tile {
     static final int width = 50, height = 50;
     int x, y;
+    // TODO: #4 Add BufferedImage attribute to store current tile's image
 
     public Tile(int x, int y) {
         this.x = x;

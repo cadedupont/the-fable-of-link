@@ -19,8 +19,8 @@ public class Game extends JFrame {
 		this.addKeyListener(controller);
 
 		// size of window to perfectly fit tiles differs based on operating system (top padding with title / exit button, aspect ratio?)
-		// this.setSize(700, 525); // Mac
-		this.setSize(716, 539); // Windows
+		this.setSize(700, 525); // Mac
+		// this.setSize(716, 539); // Windows
 		// this.setSize(700, 500); // default
 		this.setFocusable(true);
 		this.getContentPane().add(view);
@@ -33,13 +33,13 @@ public class Game extends JFrame {
 	public void run() {
 		while (true) {
 			// only update Link movement if currently not in editing mode
-			if (!controller.editOn) controller.update(); 
+			if (!Controller.editOn) controller.update(); 
 			
 			// model.update();
 			view.repaint(); 
 
 			// setting title to indicate whether edit mode is currently on
-			// this.setTitle("A4 - Collision Detection " + (controller.editOn ? "(edit mode ON)" : "(edit mode OFF)"));
+			this.setTitle("A4 - Collision Detection " + (Controller.editOn ? "(edit mode ON)" : "(edit mode OFF)"));
 
 			// update screen
 			Toolkit.getDefaultToolkit().sync();

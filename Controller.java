@@ -10,8 +10,12 @@ import java.awt.event.KeyEvent;
 class Controller implements MouseListener, KeyListener {
 	View view;
 	Model model;
-	boolean keyUp, keyDown, keyLeft, keyRight;
-	boolean editOn;
+	
+	// Link movement directions
+	public static boolean keyUp, keyDown, keyLeft, keyRight;
+	
+	// Boolean indicating whether edit mode is currently triggered
+	public static boolean editOn;
 	
 	public Controller(Model m) {
 		this.model = m;
@@ -21,20 +25,20 @@ class Controller implements MouseListener, KeyListener {
 		this.view = v;
 	}
 
-	
 	public void update() {
-		// if Link is colliding with a tile, snap Link to adjacent side of tile
+		// If Link is colliding with a tile, snap Link to adjacent side of tile
+		if (model.isColliding()) // model.link.stopColliding();
+			System.out.println("colliding");
+		else
+			System.out.println("not colliding"); 
 
-		// TODO: #2 Fix Link's position if colliding with tile
-		if (model.isColliding()) //model.link.stopColliding();
-
-		// if movement key is being pressed, then update Link's position
+		// If movement key is being pressed, then update Link's position
 		if (keyUp) model.link.y -= model.link.speed;
 		if (keyDown) model.link.y += model.link.speed;
 		if (keyLeft) model.link.x -= model.link.speed;
 		if (keyRight) model.link.x += model.link.speed;
 
-		// if Link has moved to a new room, jump to room / update window
+		// If Link has moved to a new room, jump to room / update window
 		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight) view.scroll_y -= View.maxHeight;
 		if (model.link.y > View.maxHeight && view.scroll_y < View.maxHeight) view.scroll_y += View.maxHeight;
 		if (model.link.x < View.maxWidth && view.scroll_x > View.minWidth) view.scroll_x -= View.maxWidth;
@@ -43,34 +47,34 @@ class Controller implements MouseListener, KeyListener {
 
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()) {
-			// if movement keys have been released, update corresponding boolean variables
+			// If movement keys have been released, update corresponding boolean variables
 			case KeyEvent.VK_UP: keyUp = false; break;
 			case KeyEvent.VK_DOWN: keyDown = false; break;
 			case KeyEvent.VK_LEFT: keyLeft = false; break;
 			case KeyEvent.VK_RIGHT: keyRight = false; break;
 
-			// if currently touching opposite border, update scroll position to desired border
+			// If currently touching opposite border, update scroll position to desired border
 			case KeyEvent.VK_W: if (editOn && view.scroll_y == View.maxHeight) view.scroll_y -= View.maxHeight; break;
 			case KeyEvent.VK_X: if (editOn && view.scroll_y == View.minHeight) view.scroll_y += View.maxHeight; break;
 			case KeyEvent.VK_A: if (editOn && view.scroll_x == View.maxWidth) view.scroll_x -= View.maxWidth; break;
 			case KeyEvent.VK_D: if (editOn && view.scroll_x == View.minWidth) view.scroll_x += View.maxWidth; break;
 
-			// if editing mode is currently on, save current ArrayList of tiles to map.json
+			// If editing mode is currently on, save current ArrayList of tiles to map.json
 			case KeyEvent.VK_S: if (editOn) model.marshal().save("map.json"); break;
 
-			// trigger editing mode / manual room movement
+			// Trigger editing mode / manual room movement
 			case KeyEvent.VK_E: editOn = !editOn; break;
 
-			// program exit cases
+			// Program exit cases
 			case KeyEvent.VK_Q:
             case KeyEvent.VK_ESCAPE: System.exit(0); break;
 		}
 	}
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()) {
-			// if movement keys have been pressed, update corresponding boolean variables
+			// If movement keys have been pressed, update corresponding boolean variables
 			case KeyEvent.VK_UP: if (!editOn) keyUp = true; break;
-			case KeyEvent.VK_DOWN: if (!editOn) keyDown = true; break;
+			case KeyEvent.VK_DOWN: if (!editOn) keyDown = true;  break;
 			case KeyEvent.VK_LEFT: if (!editOn) keyLeft = true; break;
 			case KeyEvent.VK_RIGHT: if (!editOn) keyRight = true; break;
 		}
@@ -78,14 +82,14 @@ class Controller implements MouseListener, KeyListener {
 	public void keyTyped(KeyEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
-		// if editing mode is not turned on, leave function
+		// If editing mode is not turned on, leave function
 		if (!editOn) return;
 
-		// calculate position clicked - take into account scroll position, snapping tile to grid
+		// Calculate position clicked - take into account scroll position, snapping tile to grid
 		int x = (e.getX() + view.scroll_x)  - ((e.getX() + view.scroll_x) % Tile.width);
 		int y = (e.getY() + view.scroll_y) - ((e.getY() + view.scroll_y) % Tile.height);
 
-		// check each tile in ArrayList, if clicked on tile that already exists, remove tile and return
+		// Check each tile in ArrayList, if clicked on tile that already exists, remove tile and return
 		for (Tile tile : model.tiles) {
 			if (tile.isOnTile(x, y)) {
 				model.tiles.remove(tile);
@@ -93,7 +97,7 @@ class Controller implements MouseListener, KeyListener {
 			}
 		}
 
-		// if clicked on empty space, add tile to position of empty space
+		// If clicked on empty space, add tile to position of empty space
 		Tile tile = new Tile(x, y);
 		model.tiles.add(tile);
 	}
