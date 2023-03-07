@@ -1,4 +1,4 @@
-// Name: Cade DuPont
+// Author: Cade DuPont
 // Date: 02.15.23
 // Description: Main class for Zelda game
 
@@ -36,12 +36,12 @@ public class Game extends JFrame {
 	public void run() {
 		while (true) {
 			// Only update Link movement if currently not in editing mode
-			if (!Controller.editOn)
-				controller.update();
-			
-			// model.update();
+			controller.update();
+			model.update();
 			view.repaint(); 
 
+			System.out.println(model.link.toString());
+			
 			// Update screen
 			Toolkit.getDefaultToolkit().sync();
 

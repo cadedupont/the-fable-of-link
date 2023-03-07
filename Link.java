@@ -1,18 +1,22 @@
-import java.awt.Image;
+// Author: Cade DuPont
+// Date: 03.07.23
+// Description: Class for Link character on screen
 
+import java.awt.Image;
 import java.awt.Graphics;
 
 public class Link {
     // Integers for storing Link's coordinates / previous coordinates for collision fixing
-    int x, y;
+    int x = 173, y = 102;
     int prev_x, prev_y;
 
     // TODO: Set Link's width and height to be width and height of current image?
     // Integers for Link's width/height
+    // Currently set to be the max width/height of given sprites
     int width = 78, height = 85;
 
     // Double for storing Link's movement speed
-    double speed = 10;
+    double speed = 7.5;
 
     // Boolean to check whether Link is currently moving
     boolean isMoving;
@@ -22,9 +26,7 @@ public class Link {
     // 1 = down
     // 2 = left
     // 3 = right
-
-    // TODO: #6 Change to enum for greater readability
-    int direction;
+    int direction = 1;
 
     // Integer for current image of Link's movement animation
     int currImage;
@@ -32,6 +34,15 @@ public class Link {
     // Image arrays to store Link movement images
     Image[] linkStill, linkUp, linkDown, linkLeft, linkRight;
     static Image image = null;
+    public static int MAX_IMAGES = 10;
+
+    // TODO: #6 Change to enum for greater readability
+    // enum Direction {
+    //     UP,
+    //     DOWN,
+    //     LEFT,
+    //     RIGHT
+    // }
 
     public Link() {
         // Load link animation images into corresponding arrays
@@ -40,19 +51,19 @@ public class Link {
             for (int i = 0; i < linkStill.length; i++)
                 linkStill[i] = View.loadImage("res/link/still/" + i + ".png");
 
-            linkUp = new Image[11];
+            linkUp = new Image[MAX_IMAGES];
             for (int i = 0; i < linkUp.length; i++)
                 linkUp[i] = View.loadImage("res/link/up/" + i + ".png");
 
-            linkDown = new Image[13];
+            linkDown = new Image[MAX_IMAGES];
             for (int i = 0; i < linkDown.length; i++)
                 linkDown[i] = View.loadImage("res/link/down/" + i + ".png");
 
-            linkLeft = new Image[13];
+            linkLeft = new Image[MAX_IMAGES];
             for (int i = 0; i < linkLeft.length; i++)
                 linkLeft[i] = View.loadImage("res/link/left/" + i + ".png");
 
-            linkRight = new Image[13];
+            linkRight = new Image[MAX_IMAGES];
             for (int i = 0; i < linkRight.length; i++)
                 linkRight[i] = View.loadImage("res/link/right/" + i + ".png");
         }
@@ -64,9 +75,7 @@ public class Link {
         return ("Link (x, y) = (" + this.x + ", " + this.y + ")");
     }
 
-    public void update() {
-        
-    }
+    public void update() {}
 
     // Draw Link onto screen
     public void draw(Graphics g, int scroll_x, int scroll_y) {
@@ -93,21 +102,28 @@ public class Link {
     public void updateImage(int direction) {
         this.direction = direction;
         this.isMoving = true;
-
         currImage++;
 
         // Need to check if currImage has reached max frame for each direction, reset to 0 if so
-        if (currImage == 13)
-            currImage = 0;
+        if (currImage >= MAX_IMAGES) currImage = 0;
     }
 
     public void savePrev() {
-        this.x = prev_x;
-        this.y = prev_y;
+        this.prev_x = this.x;
+        this.prev_y = this.y;
     }
 
     // TODO: #2 Fix Link's position if colliding with tile
-    public void stopColliding() {
+    public void stopColliding(Tile tile) {
+        int linkRight = this.x + this.width;
+        int linkDown = this.y + this.height;
+        int tileRight = tile.x + Tile.width;
+        int tileDown = tile.y + Tile.height;
 
+        if (linkRight > tile.x && this.prev_x + this.width <= tile.x) this.x = tile.x - this.width;
+        if (this.x < tileRight && this.prev_x >= tileRight) this.x = tileRight;
+
+        if (linkDown > tile.y && this.prev_y + this.height <= tile.y) this.y = tile.y - this.height;
+        if (this.y < tileDown && this.prev_y >= tileDown) this.y = tileDown;
     }
 }

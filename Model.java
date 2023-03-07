@@ -1,4 +1,4 @@
-// Name: Cade DuPont
+// Author: Cade DuPont
 // Date: 02.15.23
 // Description: Class for ArrayList of tiles, marshaling / unmarshaling map.json file of tile locations
 
@@ -14,7 +14,10 @@ public class Model {
 	}
 
 	public void update() {
-		link.update();
+		// If Link is colliding with a tile, snap Link to adjacent side of tile
+		for (Tile tile : tiles)
+			if (isColliding(tile))
+				link.stopColliding(tile);
 	}
 
 	// Marshal object into Json node, save tile locations to map.json
@@ -37,16 +40,11 @@ public class Model {
 			tiles.add(new Tile(list.get(i)));
 	}
 
-	// Check if Link character is currently colliding with a tile
-	public boolean isColliding() {
-		// If Link isn't not colliding with a tile, return true
-		// If all tiles have been checked, return false
-		for (Tile tile : tiles)
-			if (!(link.x + link.width < tile.x
+	// Check if Link character isn't not currently colliding with a tile
+	public boolean isColliding(Tile tile) {
+		return (!(link.x + link.width < tile.x
 				|| link.x > Tile.width + tile.x
 				|| link.y + link.height < tile.y
-				|| link.y + (link.height / 2) > Tile.height + tile.y))
-				return true;
-		return false;
+				|| link.y > Tile.height + tile.y)); //  + (link.height / 2)
 	}
 }

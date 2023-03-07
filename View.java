@@ -1,4 +1,4 @@
-// Name: Cade DuPont
+// Author: Cade DuPont
 // Date: 02.15.23
 // Description: Class for implementing contents of JFrame window
 
@@ -43,11 +43,6 @@ class View extends JPanel {
 
 		// Load tile images onto screen
 		model.unmarshal(Json.load("map.json"));
-
-		// Load link images into array; ignoring 0th index so indices align with file names
-		// links = new Image[51];
-		// for (int i = 1; i < links.length; i++)
-		// 	links[i] = loadImage("link" + i + ".png");
 	}
 
 	// Method for loading image
@@ -86,6 +81,8 @@ class View extends JPanel {
 		g.setColor(new Color(129, 227, 240));
 		g.fillRect(right, bottom, maxWidth, maxHeight);
 
+
+		// TODO: #7 Add lazy loading for various tile images
 		// Place different tile images based on their position
 		for (Tile tile : model.tiles) {
 			int x = tile.x - scroll_x;

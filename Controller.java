@@ -1,4 +1,4 @@
-// Name: Cade DuPont
+// Author: Cade DuPont
 // Date: 02.15.23
 // Description: Class for implementing mouse / key listeners, operations to perform with user input
 
@@ -26,20 +26,25 @@ class Controller implements MouseListener, KeyListener {
 	}
 
 	public void update() {
+		if (editOn) return;
+
 		// Save Link's previous position before updating
 		model.link.savePrev();
 
-		// If Link is colliding with a tile, snap Link to adjacent side of tile
-		if (model.isColliding()) // model.link.stopColliding();
-			System.out.println("colliding");
-		else
-			System.out.println("not colliding"); 
-
 		// If movement key is being pressed, then update Link's position
-		if (keyUp) model.link.y -= model.link.speed;
-		if (keyDown) model.link.y += model.link.speed;
-		if (keyLeft) model.link.x -= model.link.speed;
-		if (keyRight) model.link.x += model.link.speed;
+		if (keyUp) {
+			model.link.y -= model.link.speed;
+			model.link.updateImage(0);
+		} else if (keyDown) {
+			model.link.y += model.link.speed;
+			model.link.updateImage(1);
+		} else if (keyLeft) {
+			model.link.x -= model.link.speed;
+			model.link.updateImage(2);
+		} else if (keyRight) {
+			model.link.x += model.link.speed;
+			model.link.updateImage(3);
+		}
 
 		// If Link has moved to a new room, jump to room / update window
 		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight) view.scroll_y -= View.maxHeight;
@@ -62,28 +67,24 @@ class Controller implements MouseListener, KeyListener {
 				keyDown = false;
 				keyLeft = false;
 				keyRight = false;
-				model.link.updateImage(0);
 			break;
 			case KeyEvent.VK_DOWN:
 				keyUp = false;
 				keyDown = true;
 				keyLeft = false;
 				keyRight = false;
-				model.link.updateImage(1);
 			break;
 			case KeyEvent.VK_LEFT: 
 				keyUp = false;
 				keyDown = false;
 				keyLeft = true;
 				keyRight = false;
-				model.link.updateImage(2);
 			break;
 			case KeyEvent.VK_RIGHT:
 				keyUp = false;
 				keyDown = false;
 				keyLeft = false;
 				keyRight = true;
-				model.link.updateImage(3);
 			break;
 		}
 	}
