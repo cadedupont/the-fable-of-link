@@ -18,7 +18,7 @@ class View extends JPanel {
 	public static final int minWidth = 0, minHeight = 0, maxWidth = 700, maxHeight = 500;
 
 	// Integers to store window's scroll position
-	public static int scroll_x, scroll_y;
+	int scroll_x, scroll_y;
 
 	// BufferedImage variables for various tile images
 	BufferedImage cyanTile, greenTile, magentaTile, redTile;
@@ -98,7 +98,7 @@ class View extends JPanel {
 		}
 
 		// Make Link draw himself onto screen
-		model.link.draw(g);
+		model.link.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
 		if (Controller.editOn) {

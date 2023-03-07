@@ -18,10 +18,13 @@ public class Game extends JFrame {
 		view.addMouseListener(controller);
 		this.addKeyListener(controller);
 
-		// size of window to perfectly fit tiles differs based on operating system (top padding with title / exit button, aspect ratio?)
-		// this.setSize(700, 525); // Mac
-		this.setSize(716, 539); // Windows
+		// Size of window to perfectly fit tiles seems to differ
+		// based on operating system (top padding with title / exit button, aspect ratio?)
+		this.setSize(700, 525); // Mac
+		// this.setSize(716, 539); // Windows
 		// this.setSize(700, 500); // default
+
+		this.setTitle("A4 - Collision Detection & Animation");
 		this.setFocusable(true);
 		this.getContentPane().add(view);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,17 +35,17 @@ public class Game extends JFrame {
 
 	public void run() {
 		while (true) {
-			// only update Link movement if currently not in editing mode
+			// Only update Link movement if currently not in editing mode
 			if (!Controller.editOn)
 				controller.update();
 			
 			// model.update();
 			view.repaint(); 
 
-			// update screen
+			// Update screen
 			Toolkit.getDefaultToolkit().sync();
 
-			// sleep for 40 milliseconds (25 FPS)
+			// Sleep for 40 milliseconds (25 FPS)
 			try {
 				Thread.sleep(40);
 			} catch (Exception e) {

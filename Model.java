@@ -42,8 +42,10 @@ public class Model {
 		// If Link isn't not colliding with a tile, return true
 		// If all tiles have been checked, return false
 		for (Tile tile : tiles)
-			if (!(link.x + link.width < tile.x || link.x > Tile.width + tile.x
-				|| link.y + link.height < tile.y || link.y + (link.height / 2) > Tile.height + tile.y))
+			if (!(link.x + link.width < tile.x
+				|| link.x > Tile.width + tile.x
+				|| link.y + link.height < tile.y
+				|| link.y + (link.height / 2) > Tile.height + tile.y))
 				return true;
 		return false;
 	}
