@@ -37,6 +37,7 @@ public class Model {
 			tiles.add(new Tile(list.get(i)));
 	}
 
+	// Check if Link character is currently colliding with a tile
 	public boolean isColliding() {
 		// If Link isn't not colliding with a tile, return true
 		// If all tiles have been checked, return false

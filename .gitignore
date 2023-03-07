@@ -1,3 +1,8 @@
+# Unwanted Mac files
 .DS_Store
+
+# Compiled Java files
 *.class
+
+# Visual Studio Code configuration folder
 .vscode/
