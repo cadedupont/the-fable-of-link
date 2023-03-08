@@ -45,6 +45,6 @@ public class Model {
 		return (!(link.x + link.width < tile.x
 				|| link.x > Tile.width + tile.x
 				|| link.y + link.height < tile.y
-				|| link.y > Tile.height + tile.y)); //  + (link.height / 2)
+				|| link.y + (link.height / 2) > Tile.height + tile.y));
 	}
 }

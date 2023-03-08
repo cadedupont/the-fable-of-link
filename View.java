@@ -22,9 +22,6 @@ class View extends JPanel {
 
 	// BufferedImage variables for various tile images
 	BufferedImage cyanTile, greenTile, magentaTile, redTile;
-	
-	// Array of Link images
-	// Image[] links;
 
 	public View(Controller c, Model m) {
 		this.model = m;

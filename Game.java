@@ -20,8 +20,8 @@ public class Game extends JFrame {
 
 		// Size of window to perfectly fit tiles seems to differ
 		// based on operating system (top padding with title / exit button, aspect ratio?)
-		this.setSize(700, 525); // Mac
-		// this.setSize(716, 539); // Windows
+		// this.setSize(700, 525); // Mac
+		this.setSize(716, 539); // Windows
 		// this.setSize(700, 500); // default
 
 		this.setTitle("A4 - Collision Detection & Animation");
@@ -40,8 +40,6 @@ public class Game extends JFrame {
 			model.update();
 			view.repaint(); 
 
-			System.out.println(model.link.toString());
-			
 			// Update screen
 			Toolkit.getDefaultToolkit().sync();
 

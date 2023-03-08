@@ -72,7 +72,7 @@ public class Link {
     // Print Link information
     @Override
     public String toString() {
-        return ("Link (x, y) = (" + this.x + ", " + this.y + ")");
+        return ("Link (x, y) = (" + x + ", " + y + ")");
     }
 
     public void update() {}
@@ -101,7 +101,7 @@ public class Link {
     // Update current Link image frame and direction
     public void updateImage(int direction) {
         this.direction = direction;
-        this.isMoving = true;
+        isMoving = true;
         currImage++;
 
         // Need to check if currImage has reached max frame for each direction, reset to 0 if so
@@ -109,21 +109,26 @@ public class Link {
     }
 
     public void savePrev() {
-        this.prev_x = this.x;
-        this.prev_y = this.y;
+        prev_x = x;
+        prev_y = y;
     }
 
     // TODO: #2 Fix Link's position if colliding with tile
     public void stopColliding(Tile tile) {
-        int linkRight = this.x + this.width;
-        int linkDown = this.y + this.height;
-        int tileRight = tile.x + Tile.width;
-        int tileDown = tile.y + Tile.height;
+        if (y + height >= tile.y
+                && prev_y + height <= tile.y)
+            y = prev_y;
 
-        if (linkRight > tile.x && this.prev_x + this.width <= tile.x) this.x = tile.x - this.width;
-        if (this.x < tileRight && this.prev_x >= tileRight) this.x = tileRight;
+        else if ((y + height / 2) <= tile.y + Tile.height
+                && (prev_y + height / 2) >= tile.y + Tile.height)
+            y = prev_y;
 
-        if (linkDown > tile.y && this.prev_y + this.height <= tile.y) this.y = tile.y - this.height;
-        if (this.y < tileDown && this.prev_y >= tileDown) this.y = tileDown;
+        else if (x + width > tile.x
+                && prev_x + width <= tile.x)
+            x = prev_x;
+
+        else if (x <= tile.x + Tile.width
+                && prev_x >= tile.x + Tile.width)
+            x = prev_x;
     }
 }

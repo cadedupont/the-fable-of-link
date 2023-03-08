@@ -11,8 +11,6 @@ public class Tile {
     // Integers for storing Tile's coordinates
     int x, y;
 
-    // TODO: #4 Add BufferedImage attribute to store current tile's image
-
     public Tile(int x, int y) {
         this.x = x;
         this.y = y;

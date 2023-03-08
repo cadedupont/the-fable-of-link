@@ -26,6 +26,7 @@ class Controller implements MouseListener, KeyListener {
 	}
 
 	public void update() {
+		// If edit mode is currently active, leave function since function is only used for updating Link position
 		if (editOn) return;
 
 		// Save Link's previous position before updating
