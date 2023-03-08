@@ -7,6 +7,7 @@ import java.awt.Graphics;
 
 public class Link {
     // Integers for storing Link's coordinates / previous coordinates for collision fixing
+    // Hard-coded Link's initial position on screen
     int x = 173, y = 102;
     int prev_x, prev_y;
 
@@ -31,25 +32,36 @@ public class Link {
     // Integer for current image of Link's movement animation
     int currImage;
 
-    // Image arrays to store Link movement images
-    Image[] linkStill, linkUp, linkDown, linkLeft, linkRight;
-    static Image image = null;
+    // Integer for current image of Link's still animation
+    int currStill;
+
+    // Image arrays to store Link images
+    Image[][] linkStill;
+    Image[] linkUp, linkDown, linkLeft, linkRight;
     public static int MAX_IMAGES = 10;
+    static Image image = null;
 
     // TODO: #6 Change to enum for greater readability
-    // enum Direction {
-    //     UP,
-    //     DOWN,
-    //     LEFT,
-    //     RIGHT
-    // }
+    public enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT;
+
+        // Convert enums to lowercase for reading image files
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    }
 
     public Link() {
         // Load link animation images into corresponding arrays
         if (image == null) {
-            linkStill = new Image[4];
+            linkStill = new Image[4][3];
             for (int i = 0; i < linkStill.length; i++)
-                linkStill[i] = View.loadImage("res/link/still/" + i + ".png");
+                for (int j = 0; j < linkStill[i].length; j++)
+                    linkStill[i][j] = View.loadImage("res/link/still/" + Direction.values()[i].toString() + "/" + j + ".png");
 
             linkUp = new Image[MAX_IMAGES];
             for (int i = 0; i < linkUp.length; i++)
@@ -83,18 +95,25 @@ public class Link {
         int x = this.x - scroll_x;
         int y = this.y - scroll_y;
 
-        // If link is not currently moving, draw still image of Link's current direction and leave function
-        if (!isMoving) {
-            g.drawImage(linkStill[direction], x, y, null);
-            return;
+        // If link is moving, draw images for animation depending on direction of movement
+        if (isMoving) {
+            switch (direction) {
+                case 0: g.drawImage(linkUp[currImage], x, y, null); break;
+                case 1: g.drawImage(linkDown[currImage], x, y, null); break;
+                case 2: g.drawImage(linkLeft[currImage], x, y, null); break;
+                case 3: g.drawImage(linkRight[currImage], x, y, null); break;
+            }
         }
 
-        // If link is moving, draw images for animation depending on direction of movement
-        switch (direction) {
-            case 0: g.drawImage(linkUp[currImage], x, y, null); break;
-            case 1: g.drawImage(linkDown[currImage], x, y, null); break;
-            case 2: g.drawImage(linkLeft[currImage], x, y, null); break;
-            case 3: g.drawImage(linkRight[currImage], x, y, null); break;
+        // If link is not moving, draw still animation for Link's current direction
+        if (!isMoving) {
+            g.drawImage(linkStill[direction][currStill], x, y, null);
+
+            // Don't animate still images if edit mode is currently on
+            if (!Controller.editOn)
+                currStill++;
+            if (currStill >= 3)
+                currStill = 0;
         }
     }
 
@@ -104,16 +123,19 @@ public class Link {
         isMoving = true;
         currImage++;
 
-        // Need to check if currImage has reached max frame for each direction, reset to 0 if so
-        if (currImage >= MAX_IMAGES) currImage = 0;
+        // Checking if current image frame has exceeded max # of images used for animation
+        if (currImage >= MAX_IMAGES)
+            currImage = 0;
     }
 
+    // Store Link's previous position before movement for collision fixing
     public void savePrev() {
         prev_x = x;
         prev_y = y;
     }
 
-    // TODO: #2 Fix Link's position if colliding with tile
+    // Function called when Link is colliding with a tile
+    // Based on which side of tile Link collided with, move Link back to previous position
     public void stopColliding(Tile tile) {
         if (y + height >= tile.y
                 && prev_y + height <= tile.y)

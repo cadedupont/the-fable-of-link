@@ -3,6 +3,7 @@
 // Description: Class for ArrayList of tiles, marshaling / unmarshaling map.json file of tile locations
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Model {
 	ArrayList<Tile> tiles;
@@ -26,8 +27,12 @@ public class Model {
 		Json list = Json.newList();
 		ob.add("tiles", list);
 
-		for (Tile tile : tiles)
+		// Using iterator for marshaling each tile; A4 requirement
+		Iterator<Tile> it = tiles.iterator();
+		while (it.hasNext()) {
+			Tile tile = it.next();
 			list.add(tile.marshal());
+		}
 
 		return ob;
 	}

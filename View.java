@@ -38,7 +38,7 @@ class View extends JPanel {
 			System.exit(1);
 		}
 
-		// Load tile images onto screen
+		// Load tile images onto screen automatically
 		model.unmarshal(Json.load("map.json"));
 	}
 

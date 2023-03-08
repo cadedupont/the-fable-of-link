@@ -115,8 +115,10 @@ class Controller implements MouseListener, KeyListener {
 			case KeyEvent.VK_A: if (editOn && view.scroll_x == View.maxWidth) view.scroll_x -= View.maxWidth; break;
 			case KeyEvent.VK_D: if (editOn && view.scroll_x == View.minWidth) view.scroll_x += View.maxWidth; break;
 
-			// If editing mode is currently on, save current ArrayList of tiles to map.json
+			// If editing mode is currently on, save current ArrayList of tiles to map.json / load
+			// tile locations from Json file into ArrayList
 			case KeyEvent.VK_S: if (editOn) model.marshal().save("map.json"); break;
+			case KeyEvent.VK_L: if (editOn) model.unmarshal(Json.load("map.json")); break;
 
 			// Trigger edit mode
 			case KeyEvent.VK_E: editOn = !editOn; break;
