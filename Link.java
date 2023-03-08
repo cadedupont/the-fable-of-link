@@ -11,7 +11,6 @@ public class Link {
     int x = 173, y = 102;
     int prev_x, prev_y;
 
-    // TODO: Set Link's width and height to be width and height of current image?
     // Integers for Link's width/height
     // Currently set to be the max width/height of given sprites
     int width = 78, height = 85;
@@ -36,48 +35,53 @@ public class Link {
     int currStill;
 
     // Image arrays to store Link images
-    Image[][] linkStill;
-    Image[] linkUp, linkDown, linkLeft, linkRight;
+    // Image[][] linkStill;
+    Image[] linkStill, linkUp, linkDown, linkLeft, linkRight;
     public static int MAX_IMAGES = 10;
     static Image image = null;
 
-    // TODO: #6 Change to enum for greater readability
-    public enum Direction {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT;
+    // public enum Direction {
+    //     UP,
+    //     DOWN,
+    //     LEFT,
+    //     RIGHT;
 
-        // Convert enums to lowercase for reading image files
-        @Override
-        public String toString() {
-            return name().toLowerCase();
-        }
-    }
+    //     // Convert enums to lowercase for reading image files
+    //     @Override
+    //     public String toString() {
+    //         return name().toLowerCase();
+    //     }
+    // }
 
     public Link() {
         // Load link animation images into corresponding arrays
         if (image == null) {
-            linkStill = new Image[4][3];
+            // Potential 2D array implementation for animated still images
+
+            // linkStill = new Image[4][3];
+            // for (int i = 0; i < linkStill.length; i++)
+            //     for (int j = 0; j < linkStill[i].length; j++)
+            //         linkStill[i][j] = View.loadImage("img/link/still/" + Direction.values()[i].toString() + "/" + j + ".png");
+
+            linkStill = new Image[4];
             for (int i = 0; i < linkStill.length; i++)
-                for (int j = 0; j < linkStill[i].length; j++)
-                    linkStill[i][j] = View.loadImage("res/link/still/" + Direction.values()[i].toString() + "/" + j + ".png");
+                linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
 
             linkUp = new Image[MAX_IMAGES];
             for (int i = 0; i < linkUp.length; i++)
-                linkUp[i] = View.loadImage("res/link/up/" + i + ".png");
+                linkUp[i] = View.loadImage("img/link/up/" + i + ".png");
 
             linkDown = new Image[MAX_IMAGES];
             for (int i = 0; i < linkDown.length; i++)
-                linkDown[i] = View.loadImage("res/link/down/" + i + ".png");
+                linkDown[i] = View.loadImage("img/link/down/" + i + ".png");
 
             linkLeft = new Image[MAX_IMAGES];
             for (int i = 0; i < linkLeft.length; i++)
-                linkLeft[i] = View.loadImage("res/link/left/" + i + ".png");
+                linkLeft[i] = View.loadImage("img/link/left/" + i + ".png");
 
             linkRight = new Image[MAX_IMAGES];
             for (int i = 0; i < linkRight.length; i++)
-                linkRight[i] = View.loadImage("res/link/right/" + i + ".png");
+                linkRight[i] = View.loadImage("img/link/right/" + i + ".png");
         }
     }
 
@@ -103,17 +107,19 @@ public class Link {
                 case 2: g.drawImage(linkLeft[currImage], x, y, null); break;
                 case 3: g.drawImage(linkRight[currImage], x, y, null); break;
             }
-        }
+        } else {
+            // If link is not moving, draw still animation for Link's current direction
+            g.drawImage(linkStill[direction], x, y, null);
 
-        // If link is not moving, draw still animation for Link's current direction
-        if (!isMoving) {
-            g.drawImage(linkStill[direction][currStill], x, y, null);
+            // Working implementation for animating still images- however, cycle happens too quickly
 
-            // Don't animate still images if edit mode is currently on
-            if (!Controller.editOn)
-                currStill++;
-            if (currStill >= 3)
-                currStill = 0;
+            // g.drawImage(linkStill[direction][currStill], x, y, null);
+
+            // Don't animate still images if edit mode is toggled
+            // if (!Controller.editOn)
+            //     currStill++;
+            // if (currStill >= 3)
+            //     currStill = 0;
         }
     }
 

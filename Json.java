@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 
-// This class represents a node in a JSON DOM. Here is an example for how to use this class:
+// This class repimgents a node in a JSON DOM. Here is an example for how to use this class:
 //
 // class  g
 // {

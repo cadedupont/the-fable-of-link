@@ -3,10 +3,9 @@
 // Description: Class for implementing contents of JFrame window
 
 import javax.swing.JPanel;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -20,23 +19,9 @@ class View extends JPanel {
 	// Integers to store window's scroll position
 	int scroll_x, scroll_y;
 
-	// BufferedImage variables for various tile images
-	BufferedImage cyanTile, greenTile, magentaTile, redTile;
-
 	public View(Controller c, Model m) {
 		this.model = m;
 		c.setView(this);
-		
-		// Load tile images into memory
-		try {
-			this.greenTile = ImageIO.read(new File("res/tiles/green.jpg"));
-			this.redTile = ImageIO.read(new File("res/tiles/red.jpg"));
-			this.magentaTile = ImageIO.read(new File("res/tiles/purple.jpg"));
-			this.cyanTile = ImageIO.read(new File("res/tiles/cyan.jpg"));
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
-			System.exit(1);
-		}
 
 		// Load tile images onto screen automatically
 		model.unmarshal(Json.load("map.json"));
@@ -78,27 +63,19 @@ class View extends JPanel {
 		g.setColor(new Color(129, 227, 240));
 		g.fillRect(right, bottom, maxWidth, maxHeight);
 
-
-		// TODO: #7 Add lazy loading for various tile images
 		// Place different tile images based on their position
-		for (Tile tile : model.tiles) {
-			int x = tile.x - scroll_x;
-			int y = tile.y - scroll_y;
-			
-			if (tile.x < maxWidth && tile.y < maxHeight) g.drawImage(greenTile, x, y, null);
-			if (tile.x >= maxWidth && tile.y < maxHeight) g.drawImage(redTile, x, y, null);
-			if (tile.x < maxWidth && tile.y >= maxHeight) g.drawImage(magentaTile, x, y, null);
-			if (tile.x >= maxWidth && tile.y >= maxHeight) g.drawImage(cyanTile, x, y, null);
-		}
+		for (Tile tile : model.tiles)
+			tile.draw(g, scroll_x, scroll_y);
 
 		// Make Link draw himself onto screen
 		model.link.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
+		// Hard-coding text position on screen
 		if (Controller.editOn) {
-			g.setColor(new Color(255, 255, 255));
-			g.setFont(new Font("SansSerif", Font.BOLD, 24));
-			g.drawString("Edit mode is ON", View.minWidth + 25, View.minHeight + 35);
+			g.setColor(new Color(255, 255, 0));
+			g.setFont(new Font("Default", Font.BOLD, 24));
+			g.drawString("Edit mode: ON", (View.maxWidth / 2) - 88, View.maxHeight - 17);
 		}
 	}
 }

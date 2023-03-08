@@ -14,7 +14,7 @@ class Controller implements MouseListener, KeyListener {
 	// Link movement directions
 	public static boolean keyUp, keyDown, keyLeft, keyRight;
 	
-	// Boolean indicating whether edit mode is currently triggered
+	// Boolean indicating whether edit mode is currently toggled
 	public static boolean editOn;
 	
 	public Controller(Model m) {
@@ -60,7 +60,7 @@ class Controller implements MouseListener, KeyListener {
 		if (editOn) return;
 
 		switch(e.getKeyCode()) {
-			// If movement keys have been pressed, update corresponding boolean variables
+			// If movement keys have been pressed, update corimgponding boolean variables
 			// and set other key booleans to false to prevent diagonal movement. Calling function
 			// inside Link class to update direction Link is facing and animating movement
 			case KeyEvent.VK_UP:
@@ -120,7 +120,7 @@ class Controller implements MouseListener, KeyListener {
 			case KeyEvent.VK_S: if (editOn) model.marshal().save("map.json"); break;
 			case KeyEvent.VK_L: if (editOn) model.unmarshal(Json.load("map.json")); break;
 
-			// Trigger edit mode
+			// Toggle edit mode
 			case KeyEvent.VK_E: editOn = !editOn; break;
 
 			// Program exit cases
