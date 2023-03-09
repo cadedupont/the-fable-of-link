@@ -5,83 +5,60 @@
 import java.awt.Image;
 import java.awt.Graphics;
 
+// Declaring enums for directions Link can be facing
+enum Direction {
+    UP(0),
+    DOWN(1),
+    LEFT(2),
+    RIGHT(3);
+
+    public final int direction;
+
+    // Private constructor for assigning enums with integer values
+    private Direction(int direction) {
+        this.direction = direction;
+    }
+    
+    // Convert enums to lowercase for reading image files
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
+}
+
 public class Link {
-    // Integers for storing Link's coordinates / previous coordinates for collision fixing
-    // Hard-coded Link's initial position on screen
+    // Integers for Link coordinates, character width/height, previous coordinates for collision fixing
+    // Hard-coding starting position in window, width and height based on max image size in sprite sheet
     int x = 173, y = 102;
+    int width = 78, height = 85;
     int prev_x, prev_y;
 
-    // Integers for Link's width/height
-    // Currently set to be the max width/height of given sprites
-    int width = 78, height = 85;
-
-    // Double for storing Link's movement speed
+    // Store Link's movement speed, whether Link is moving and where he's facing
+    // Link facing downward upon running game
     double speed = 7.5;
-
-    // Boolean to check whether Link is currently moving
     boolean isMoving;
+    Direction facing = Direction.DOWN;
 
-    // Integer to store Link's direction:
-    // 0 = up
-    // 1 = down
-    // 2 = left
-    // 3 = right
-    int direction = 1;
-
-    // Integer for current image of Link's movement animation
-    int currImage;
-
-    // Integer for current image of Link's still animation
-    int currStill;
-
-    // Image arrays to store Link images
-    // Image[][] linkStill;
-    Image[] linkStill, linkUp, linkDown, linkLeft, linkRight;
-    public static int MAX_IMAGES = 10;
+    // Arrays for storing Link images
+    Image[][] linkMove;
+    Image[] linkStill;
     static Image image = null;
-
-    // public enum Direction {
-    //     UP,
-    //     DOWN,
-    //     LEFT,
-    //     RIGHT;
-
-    //     // Convert enums to lowercase for reading image files
-    //     @Override
-    //     public String toString() {
-    //         return name().toLowerCase();
-    //     }
-    // }
+    
+    public static final int MAX_MOVE_IMAGES = 10;
+    public static final int MAX_STILL_IMAGES = 4;
+    int currImage;
 
     public Link() {
         // Load link animation images into corresponding arrays
         if (image == null) {
-            // Potential 2D array implementation for animated still images
-
-            // linkStill = new Image[4][3];
-            // for (int i = 0; i < linkStill.length; i++)
-            //     for (int j = 0; j < linkStill[i].length; j++)
-            //         linkStill[i][j] = View.loadImage("img/link/still/" + Direction.values()[i].toString() + "/" + j + ".png");
-
-            linkStill = new Image[4];
+            linkStill = new Image[MAX_STILL_IMAGES];
             for (int i = 0; i < linkStill.length; i++)
                 linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
 
-            linkUp = new Image[MAX_IMAGES];
-            for (int i = 0; i < linkUp.length; i++)
-                linkUp[i] = View.loadImage("img/link/up/" + i + ".png");
-
-            linkDown = new Image[MAX_IMAGES];
-            for (int i = 0; i < linkDown.length; i++)
-                linkDown[i] = View.loadImage("img/link/down/" + i + ".png");
-
-            linkLeft = new Image[MAX_IMAGES];
-            for (int i = 0; i < linkLeft.length; i++)
-                linkLeft[i] = View.loadImage("img/link/left/" + i + ".png");
-
-            linkRight = new Image[MAX_IMAGES];
-            for (int i = 0; i < linkRight.length; i++)
-                linkRight[i] = View.loadImage("img/link/right/" + i + ".png");
+            linkMove = new Image[Direction.values().length][MAX_MOVE_IMAGES];
+            for (int i = 0; i < linkMove.length; i++)
+                for (int j = 0; j < linkMove[i].length; j++)
+                    linkMove[i][j] = View.loadImage("img/link/" + Direction.values()[i].toString() + "/" + j + ".png");
         }
     }
 
@@ -95,42 +72,22 @@ public class Link {
 
     // Draw Link onto screen
     public void draw(Graphics g, int scroll_x, int scroll_y) {
-        // Calculate Link's current position on screen
-        int x = this.x - scroll_x;
-        int y = this.y - scroll_y;
-
         // If link is moving, draw images for animation depending on direction of movement
-        if (isMoving) {
-            switch (direction) {
-                case 0: g.drawImage(linkUp[currImage], x, y, null); break;
-                case 1: g.drawImage(linkDown[currImage], x, y, null); break;
-                case 2: g.drawImage(linkLeft[currImage], x, y, null); break;
-                case 3: g.drawImage(linkRight[currImage], x, y, null); break;
-            }
-        } else {
-            // If link is not moving, draw still animation for Link's current direction
-            g.drawImage(linkStill[direction], x, y, null);
-
-            // Working implementation for animating still images- however, cycle happens too quickly
-
-            // g.drawImage(linkStill[direction][currStill], x, y, null);
-
-            // Don't animate still images if edit mode is toggled
-            // if (!Controller.editOn)
-            //     currStill++;
-            // if (currStill >= 3)
-            //     currStill = 0;
-        }
+        // Otherwise, draw still image in that direction
+        if (isMoving)
+            g.drawImage(linkMove[facing.direction][currImage], x - scroll_x, y - scroll_y, null);
+        else
+            g.drawImage(linkStill[facing.direction], x - scroll_x, y - scroll_y, null);
     }
 
     // Update current Link image frame and direction
-    public void updateImage(int direction) {
-        this.direction = direction;
+    public void updateImage(Direction facing) {
+        this.facing = facing;
         isMoving = true;
         currImage++;
 
         // Checking if current image frame has exceeded max # of images used for animation
-        if (currImage >= MAX_IMAGES)
+        if (currImage >= MAX_MOVE_IMAGES)
             currImage = 0;
     }
 

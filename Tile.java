@@ -5,14 +5,26 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+// Declare enums for possible tile colors
+// Color of tile drawn determined based on tile's window position
+enum TileColors {
+    GREEN,
+    RED,
+    PURPLE,
+    CYAN;
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
+}
+
 public class Tile {
-    // Static integers for storing tile images' widths and heights
-    static final int width = 50, height = 50;
-
-    // Integers for storing tile's coordinates
+    // Store tile's coordinates, width and height
     int x, y;
+    static final int width = 50, height = 50;    
 
-    // String for storing color of tile image
+    // Store possible tile images
     public static Image greenTile, redTile, purpleTile, cyanTile;
 
     // Set single tile's coordinates
@@ -26,7 +38,7 @@ public class Tile {
         this.x = (int) ob.getLong("x");
         this.y = (int) ob.getLong("y");
 
-        // Add lazy loading for tile images
+        // Lazy loading for tile images
         if (greenTile == null) greenTile = View.loadImage("img/tiles/green.jpg");
         if (redTile == null) redTile = View.loadImage("img/tiles/red.jpg");
         if (purpleTile == null) purpleTile = View.loadImage("img/tiles/purple.jpg");
@@ -52,7 +64,7 @@ public class Tile {
         return (this.x == x && this.y == y);
     }
 
-    // Draw tile image onto screen
+    // Draw tile image onto screen; different color based on tile position
     public void draw(Graphics g, int scroll_x, int scroll_y) {
         if (x < View.maxWidth && y < View.maxHeight) g.drawImage(greenTile, this.x - scroll_x, this.y - scroll_y, null);
         if (x >= View.maxWidth && y < View.maxHeight) g.drawImage(redTile, this.x - scroll_x, this.y - scroll_y, null);

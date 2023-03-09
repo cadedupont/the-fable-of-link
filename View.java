@@ -13,10 +13,8 @@ import java.awt.Image;
 class View extends JPanel {
 	Model model;
 
-	// Integers for window width and height, use when performing movement operations
+	// Integers for window size, current scroll position
 	public static final int minWidth = 0, minHeight = 0, maxWidth = 700, maxHeight = 500;
-
-	// Integers to store window's scroll position
 	int scroll_x, scroll_y;
 
 	public View(Controller c, Model m) {
@@ -27,7 +25,7 @@ class View extends JPanel {
 		model.unmarshal(Json.load("map.json"));
 	}
 
-	// Method for loading image
+	// Method for loading image passed as argument
 	static Image loadImage(String filename) {
 		Image image = null;
 		try {
@@ -39,7 +37,6 @@ class View extends JPanel {
 		return image;
 	}
 
-	// Method for drawing screen for each frame
 	public void paintComponent(Graphics g) {
 		// Calculate current positions of quadrants for setting background color
 		int left = minWidth - scroll_x;

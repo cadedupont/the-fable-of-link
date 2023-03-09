@@ -11,10 +11,8 @@ class Controller implements MouseListener, KeyListener {
 	View view;
 	Model model;
 	
-	// Link movement directions
-	public static boolean keyUp, keyDown, keyLeft, keyRight;
-	
-	// Boolean indicating whether edit mode is currently toggled
+	// Booleans for Link movement, toggling edit mode
+	boolean keyUp, keyDown, keyLeft, keyRight;
 	public static boolean editOn;
 	
 	public Controller(Model m) {
@@ -35,16 +33,16 @@ class Controller implements MouseListener, KeyListener {
 		// If movement key is being pressed, then update Link's position
 		if (keyUp) {
 			model.link.y -= model.link.speed;
-			model.link.updateImage(0);
+			model.link.updateImage(Direction.UP);
 		} else if (keyDown) {
 			model.link.y += model.link.speed;
-			model.link.updateImage(1);
+			model.link.updateImage(Direction.DOWN);
 		} else if (keyLeft) {
 			model.link.x -= model.link.speed;
-			model.link.updateImage(2);
+			model.link.updateImage(Direction.LEFT);
 		} else if (keyRight) {
 			model.link.x += model.link.speed;
-			model.link.updateImage(3);
+			model.link.updateImage(Direction.RIGHT);
 		}
 
 		// If Link has moved to a new room, jump to room / update window
@@ -60,7 +58,7 @@ class Controller implements MouseListener, KeyListener {
 		if (editOn) return;
 
 		switch(e.getKeyCode()) {
-			// If movement keys have been pressed, update corimgponding boolean variables
+			// If movement keys have been pressed, update corresponding boolean variables
 			// and set other key booleans to false to prevent diagonal movement. Calling function
 			// inside Link class to update direction Link is facing and animating movement
 			case KeyEvent.VK_UP:

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Model {
+	// Store list of tiles, reference to Link
 	ArrayList<Tile> tiles;
 	Link link;
 
