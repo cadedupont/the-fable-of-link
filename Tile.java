@@ -5,20 +5,6 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
-// Declare enums for possible tile colors
-// Color of tile drawn determined based on tile's window position
-enum TileColors {
-    GREEN,
-    RED,
-    PURPLE,
-    CYAN;
-
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
-    }
-}
-
 public class Tile {
     // Store tile's coordinates, width and height
     int x, y;

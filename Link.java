@@ -43,6 +43,8 @@ public class Link {
     Image[][] linkMove;
     Image[] linkStill;
 
+    // Constant integers for storing max # of movement/still images,
+    // integer for current index of array / image being displayed on screen
     public static final int MAX_MOVE_IMAGES = 10;
     public static final int MAX_STILL_IMAGES = 4;
     int currImage;

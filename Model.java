@@ -16,10 +16,18 @@ public class Model {
 	}
 
 	public void update() {
-		// If Link is colliding with a tile, snap Link to adjacent side of tile
+		// If Link is colliding with a tile, move Link to adjacent side of tile
 		for (Tile tile : tiles)
 			if (isColliding(tile))
 				link.stopColliding(tile);
+	}
+
+	// Check if Link character isn't not currently colliding with a tile
+	public boolean isColliding(Tile tile) {
+		return !(link.x + link.width < tile.x
+				|| link.x > Tile.width + tile.x
+				|| link.y + link.height < tile.y
+				|| link.y + (link.height / 2) > Tile.height + tile.y);
 	}
 
 	// Marshal object into Json node, save tile locations to map.json
@@ -30,10 +38,8 @@ public class Model {
 
 		// Using iterator for marshaling each tile; A4 requirement
 		Iterator<Tile> it = tiles.iterator();
-		while (it.hasNext()) {
-			Tile tile = it.next();
-			list.add(tile.marshal());
-		}
+		while (it.hasNext())
+			list.add(it.next().marshal());
 
 		return ob;
 	}
@@ -44,13 +50,5 @@ public class Model {
 		Json list = ob.get("tiles");
 		for (int i = 0; i < list.size(); i++)
 			tiles.add(new Tile(list.get(i)));
-	}
-
-	// Check if Link character isn't not currently colliding with a tile
-	public boolean isColliding(Tile tile) {
-		return (!(link.x + link.width < tile.x
-				|| link.x > Tile.width + tile.x
-				|| link.y + link.height < tile.y
-				|| link.y + (link.height / 2) > Tile.height + tile.y));
-	}
+	}	
 }

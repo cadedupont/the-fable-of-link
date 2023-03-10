@@ -10,7 +10,7 @@ public class Game extends JFrame {
 	Model model;
 	View view;
 
-	public Game() {
+	public Game(int width, int height) {
 		model = new Model();
 		controller = new Controller(model);
 		view = new View(controller, model);
@@ -18,12 +18,7 @@ public class Game extends JFrame {
 		view.addMouseListener(controller);
 		this.addKeyListener(controller);
 
-		// Size of window to perfectly fit tiles seems to differ
-		// based on operating system (top padding with title / exit button, aspect ratio?)
-		// this.setSize(700, 525); // Mac
-		this.setSize(716, 539); // Windows
-		// this.setSize(700, 500); // default
-
+		this.setSize(width, height);
 		this.setTitle("A4 - Collision Detection & Animation");
 		this.setFocusable(true);
 		this.getContentPane().add(view);
@@ -54,6 +49,15 @@ public class Game extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new Game().run();
+		// Size of window to perfectly fit tiles seems to differ based on OS- so,
+		// when running build.bat on Windows or build.bash on Mac/Linux, window
+		// width/height are passed as arguments when running respective scripts.
+		// If no arguments are passed when running the program, then default 700x500
+		// window size is used instead
+		try {
+			new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1])).run();
+		} catch (Exception e) {
+			new Game(700, 500).run();
+		}
 	}
 }
