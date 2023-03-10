@@ -54,7 +54,7 @@ class Controller implements MouseListener, KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		// Because function currently only takes Link movement into consideration, if edit is on, then arrow key movements
-		// don't need to be read, so break out of function
+		// don't need to be read, so leave function
 		if (editOn) return;
 
 		switch(e.getKeyCode()) {
@@ -123,7 +123,7 @@ class Controller implements MouseListener, KeyListener {
 
 			// Program exit cases
 			case KeyEvent.VK_Q:
-            case KeyEvent.VK_ESCAPE: System.exit(0); break;
+			case KeyEvent.VK_ESCAPE: System.exit(0); break;
 		}
 	}
 	public void keyTyped(KeyEvent e) {}

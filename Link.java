@@ -14,7 +14,7 @@ enum Direction {
 
     public final int direction;
 
-    // Private constructor for assigning enums with integer values
+    // Private constructor for assigning enums with integer values for reading array indices
     private Direction(int direction) {
         this.direction = direction;
     }
@@ -42,24 +42,22 @@ public class Link {
     // Arrays for storing Link images
     Image[][] linkMove;
     Image[] linkStill;
-    static Image image = null;
-    
+
     public static final int MAX_MOVE_IMAGES = 10;
     public static final int MAX_STILL_IMAGES = 4;
     int currImage;
 
     public Link() {
         // Load link animation images into corresponding arrays
-        if (image == null) {
-            linkStill = new Image[MAX_STILL_IMAGES];
-            for (int i = 0; i < linkStill.length; i++)
-                linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
+        linkStill = new Image[MAX_STILL_IMAGES];
+        for (int i = 0; i < linkStill.length; i++)
+            linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
 
-            linkMove = new Image[Direction.values().length][MAX_MOVE_IMAGES];
-            for (int i = 0; i < linkMove.length; i++)
-                for (int j = 0; j < linkMove[i].length; j++)
-                    linkMove[i][j] = View.loadImage("img/link/" + Direction.values()[i].toString() + "/" + j + ".png");
-        }
+        // Using nested for loop for sorting different direction images into columns
+        linkMove = new Image[Direction.values().length][MAX_MOVE_IMAGES];
+        for (int i = 0; i < linkMove.length; i++)
+            for (int j = 0; j < linkMove[i].length; j++)
+                linkMove[i][j] = View.loadImage("img/link/" + Direction.values()[i].toString() + "/" + j + ".png");
     }
 
     // Print Link information
@@ -81,14 +79,13 @@ public class Link {
     }
 
     // Update current Link image frame and direction
-    public void updateImage(Direction facing) {
-        this.facing = facing;
+    public void updateImage(Direction dir) {
+        facing = dir;
         isMoving = true;
         currImage++;
 
         // Checking if current image frame has exceeded max # of images used for animation
-        if (currImage >= MAX_MOVE_IMAGES)
-            currImage = 0;
+        if (currImage >= MAX_MOVE_IMAGES) currImage = 0;
     }
 
     // Store Link's previous position before movement for collision fixing
@@ -100,19 +97,24 @@ public class Link {
     // Function called when Link is colliding with a tile
     // Based on which side of tile Link collided with, move Link back to previous position
     public void stopColliding(Tile tile) {
+        // Bottom side of Link colliding with upper side of tile
         if (y + height >= tile.y
                 && prev_y + height <= tile.y)
             y = prev_y;
 
-        else if ((y + height / 2) <= tile.y + Tile.height
+        // Upper side of Link colliding with lower side of tile
+        // Adding half of Link's height to y position to prevent Link's head from causing collision
+        if ((y + height / 2) <= tile.y + Tile.height
                 && (prev_y + height / 2) >= tile.y + Tile.height)
             y = prev_y;
 
-        else if (x + width > tile.x
+        // Right side of Link colliding with left side of tile
+        if (x + width > tile.x
                 && prev_x + width <= tile.x)
             x = prev_x;
 
-        else if (x <= tile.x + Tile.width
+        // Left side of Link colliding with right side of tile
+        if (x <= tile.x + Tile.width
                 && prev_x >= tile.x + Tile.width)
             x = prev_x;
     }

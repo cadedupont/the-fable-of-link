@@ -60,11 +60,11 @@ class View extends JPanel {
 		g.setColor(new Color(129, 227, 240));
 		g.fillRect(right, bottom, maxWidth, maxHeight);
 
-		// Place different tile images based on their position
+		// Draw different tile images based on their position
 		for (Tile tile : model.tiles)
 			tile.draw(g, scroll_x, scroll_y);
 
-		// Make Link draw himself onto screen
+		// Draw Link onto screen
 		model.link.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
