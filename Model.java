@@ -1,43 +1,46 @@
 // Author: Cade DuPont
 // Date: 02.15.23
-// Description: Class for ArrayList of tiles, marshaling / unmarshaling map.json file of tile locations
+// Description: Class for ArrayList of sprites, marshaling / unmarshaling map.json file of tile locations
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Model {
-	// Store list of tiles, reference to Link
-	ArrayList<Tile> tiles;
+	// Store list of sprites, reference to Link
+	ArrayList<Sprite> sprites;
 	Link link;
 
 	public Model() {
-		tiles = new ArrayList<Tile>();
+		sprites = new ArrayList<Sprite>();
 		link = new Link();
 	}
 
 	public void update() {
 		// If Link is colliding with a tile, move Link to adjacent side of tile
-		for (Tile tile : tiles)
-			if (isColliding(tile))
-				link.stopColliding(tile);
+		for (Sprite sprite : sprites) {
+			// sprite.update();
+			if (isColliding(link, sprite))
+				if (sprite.isTile())
+					link.stopColliding(sprite);
+		}
 	}
 
-	// Check if Link character isn't not currently colliding with a tile
-	public boolean isColliding(Tile tile) {
-		return !(link.x + link.width < tile.x
-				|| link.x > Tile.width + tile.x
-				|| link.y + link.height < tile.y
-				|| link.y + (link.height / 2) > Tile.height + tile.y);
+	// Check if two sprites are colliding
+	public boolean isColliding(Sprite a, Sprite b) {
+		return !(a.x + a.width < b.x
+				|| a.x > b.width + b.x
+				|| a.y + a.height < b.y
+				|| a.y + (a.height / 2) > b.height + b.y);
 	}
 
 	// Marshal object into Json node, save tile locations to map.json
 	public Json marshal() {
 		Json ob = Json.newObject();
 		Json list = Json.newList();
-		ob.add("tiles", list);
+		ob.add("sprites", list);
 
 		// Using iterator for marshaling each tile; A4 requirement
-		Iterator<Tile> it = tiles.iterator();
+		Iterator<Sprite> it = sprites.iterator();
 		while (it.hasNext())
 			list.add(it.next().marshal());
 
@@ -46,9 +49,10 @@ public class Model {
 
 	// Unmarshal tile location data from map.json, add to ArrayList of tile objects
 	public void unmarshal(Json ob) {
-		tiles = new ArrayList<Tile>();
-		Json list = ob.get("tiles");
+		sprites = new ArrayList<Sprite>();
+		Json list = ob.get("sprites");
 		for (int i = 0; i < list.size(); i++)
-			tiles.add(new Tile(list.get(i)));
+			sprites.add(new Tile(list.get(i)));
+		sprites.add(link);
 	}	
 }

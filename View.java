@@ -61,11 +61,11 @@ class View extends JPanel {
 		g.fillRect(right, bottom, maxWidth, maxHeight);
 
 		// Draw different tile images based on their position
-		for (Tile tile : model.tiles)
-			tile.draw(g, scroll_x, scroll_y);
+		for (Sprite sprite : model.sprites)
+			sprite.draw(g, scroll_x, scroll_y);
 
 		// Draw Link onto screen
-		model.link.draw(g, scroll_x, scroll_y);
+		// model.link.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
 		// Hard-coding text position on screen

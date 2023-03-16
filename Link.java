@@ -26,11 +26,8 @@ enum Direction {
     }
 }
 
-public class Link {
-    // Integers for Link coordinates, character width/height, previous coordinates for collision fixing
-    // Hard-coding starting position in window, width and height based on max image size in sprite sheet
-    int x = 173, y = 102;
-    int width = 78, height = 85;
+public class Link extends Sprite {
+    // Integers for Link's previous coordinates to fix Tile collision
     int prev_x, prev_y;
 
     // Store Link's movement speed, whether Link is moving and where he's facing
@@ -50,6 +47,11 @@ public class Link {
     int currImage;
 
     public Link() {
+        this.x = 173;
+        this.y = 102;
+        this.width = 78;
+        this.height = 85;
+
         // Load link animation images into corresponding arrays
         linkStill = new Image[MAX_STILL_IMAGES];
         for (int i = 0; i < linkStill.length; i++)
@@ -68,6 +70,12 @@ public class Link {
         return ("Link (x, y) = (" + x + ", " + y + ")");
     }
 
+    // Identify current Sprite as Link
+    @Override
+    public boolean isLink() {
+        return true;
+    }
+
     public void update() {}
 
     // Draw Link onto screen
@@ -78,6 +86,14 @@ public class Link {
             g.drawImage(linkMove[facing.direction][currImage], x - scroll_x, y - scroll_y, null);
         else
             g.drawImage(linkStill[facing.direction], x - scroll_x, y - scroll_y, null);
+    }
+
+    // Marshal Link data into Json object
+    public Json marshal() {
+        Json ob = Json.newObject();
+        ob.add("x", x);
+        ob.add("y", y);
+        return ob;
     }
 
     // Update current Link image frame and direction
@@ -98,7 +114,7 @@ public class Link {
 
     // Function called when Link is colliding with a tile
     // Based on which side of tile Link collided with, move Link back to previous position
-    public void stopColliding(Tile tile) {
+    public void stopColliding(Sprite tile) {
         // Bottom side of Link colliding with upper side of tile
         if (y + height >= tile.y
                 && prev_y + height <= tile.y)
@@ -106,8 +122,8 @@ public class Link {
 
         // Upper side of Link colliding with lower side of tile
         // Adding half of Link's height to y position to prevent Link's head from causing collision
-        if ((y + height / 2) <= tile.y + Tile.height
-                && (prev_y + height / 2) >= tile.y + Tile.height)
+        if ((y + height / 2) <= tile.y + tile.height
+                && (prev_y + height / 2) >= tile.y + tile.height)
             y = prev_y;
 
         // Right side of Link colliding with left side of tile
@@ -116,8 +132,8 @@ public class Link {
             x = prev_x;
 
         // Left side of Link colliding with right side of tile
-        if (x <= tile.x + Tile.width
-                && prev_x >= tile.x + Tile.width)
+        if (x <= tile.x + tile.width
+                && prev_x >= tile.x + tile.width)
             x = prev_x;
     }
 }

@@ -132,20 +132,20 @@ class Controller implements MouseListener, KeyListener {
 		if (!editOn) return;
 
 		// Calculate position clicked - take into account scroll position, snapping tile to grid
-		int x = (e.getX() + view.scroll_x)  - ((e.getX() + view.scroll_x) % Tile.width);
-		int y = (e.getY() + view.scroll_y) - ((e.getY() + view.scroll_y) % Tile.height);
+		int x = (e.getX() + view.scroll_x)  - ((e.getX() + view.scroll_x) % 50);
+		int y = (e.getY() + view.scroll_y) - ((e.getY() + view.scroll_y) % 50);
 
 		// Check each tile in ArrayList, if clicked on tile that already exists, remove tile and return
-		for (Tile tile : model.tiles) {
-			if (tile.isOnTile(x, y)) {
-				model.tiles.remove(tile);
+		for (Sprite sprite : model.sprites) {
+			if (sprite.isTile() && ((Tile)sprite).isOnTile(x, y)) {
+				model.sprites.remove(sprite);
 				return;
 			}
 		}
 
 		// If clicked on empty space, add tile to position of empty space
 		Tile tile = new Tile(x, y);
-		model.tiles.add(tile);
+		model.sprites.add(tile);
 	}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
