@@ -37,8 +37,8 @@ public class Link extends Sprite {
     Direction facing = Direction.DOWN;
 
     // Arrays for storing Link images
-    Image[][] linkMove;
-    Image[] linkStill;
+    public static Image[][] linkMove;
+    public static Image[] linkStill;
 
     // Constant integers for storing max # of movement/still images,
     // integer for current index of array / image being displayed on screen
@@ -53,21 +53,23 @@ public class Link extends Sprite {
         this.height = 85;
 
         // Load link animation images into corresponding arrays
-        linkStill = new Image[MAX_STILL_IMAGES];
-        for (int i = 0; i < linkStill.length; i++)
-            linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
+        if (linkStill == null || linkMove == null) {
+            linkStill = new Image[MAX_STILL_IMAGES];
+            for (int i = 0; i < linkStill.length; i++)
+                linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
 
-        // Using nested for loop for sorting different direction images into columns
-        linkMove = new Image[Direction.values().length][MAX_MOVE_IMAGES];
-        for (int i = 0; i < linkMove.length; i++)
-            for (int j = 0; j < linkMove[i].length; j++)
-                linkMove[i][j] = View.loadImage("img/link/" + Direction.values()[i].toString() + "/" + j + ".png");
+            // Using nested for loop for sorting different direction images into columns
+            linkMove = new Image[Direction.values().length][MAX_MOVE_IMAGES];
+            for (int i = 0; i < linkMove.length; i++)
+                for (int j = 0; j < linkMove[i].length; j++)
+                    linkMove[i][j] = View.loadImage("img/link/" + Direction.values()[i].toString() + "/" + j + ".png");
+        }
     }
 
     // Print Link information
     @Override
     public String toString() {
-        return ("Link (x, y) = (" + x + ", " + y + ")");
+        return "Link (x, y) = (" + x + ", " + y + ")";
     }
 
     // Identify current Sprite as Link
@@ -76,7 +78,9 @@ public class Link extends Sprite {
         return true;
     }
 
-    public void update() {}
+    public boolean update() {
+        return true;
+    }
 
     // Draw Link onto screen
     public void draw(Graphics g, int scroll_x, int scroll_y) {
@@ -91,8 +95,8 @@ public class Link extends Sprite {
     // Marshal Link data into Json object
     public Json marshal() {
         Json ob = Json.newObject();
-        ob.add("x", x);
-        ob.add("y", y);
+        ob.add("link_x", y);
+        ob.add("link_y", y);
         return ob;
     }
 
@@ -103,7 +107,8 @@ public class Link extends Sprite {
         currImage++;
 
         // Checking if current image frame has exceeded max # of images used for animation
-        if (currImage >= MAX_MOVE_IMAGES) currImage = 0;
+        if (currImage >= MAX_MOVE_IMAGES)
+            currImage = 0;
     }
 
     // Store Link's previous position before movement for collision fixing

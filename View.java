@@ -60,19 +60,17 @@ class View extends JPanel {
 		g.setColor(new Color(129, 227, 240));
 		g.fillRect(right, bottom, maxWidth, maxHeight);
 
-		// Draw different tile images based on their position
+		// Draw sprite images onto screen
 		for (Sprite sprite : model.sprites)
 			sprite.draw(g, scroll_x, scroll_y);
-
-		// Draw Link onto screen
-		// model.link.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
 		// Hard-coding text position on screen
 		if (Controller.editOn) {
 			g.setColor(new Color(255, 255, 0));
 			g.setFont(new Font("Default", Font.BOLD, 24));
-			g.drawString("Edit mode: ON", (View.maxWidth / 2) - 88, View.maxHeight - 17);
+			g.drawString((Controller.potOn) ? "Pots enabled" : "Tiles enabled", (View.maxWidth / 2) - 65, View.maxHeight - 17);
+			g.drawString("Edit mode enabled", (View.maxWidth / 2) - 95, View.maxHeight - 50);
 		}
 	}
 }

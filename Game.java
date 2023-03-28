@@ -14,11 +14,10 @@ public class Game extends JFrame {
 		model = new Model();
 		controller = new Controller(model);
 		view = new View(controller, model);
-
 		view.addMouseListener(controller);
 		this.addKeyListener(controller);
 		this.setSize(width, height);
-		this.setTitle("A5 - Adding Sprites, Polymorphism");
+		this.setTitle("A5 - Adding Sprites");
 		this.setFocusable(true);
 		this.getContentPane().add(view);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,10 +52,12 @@ public class Game extends JFrame {
 		// width/height are passed as arguments when running respective scripts.
 		// If no arguments are passed when running the program, then default 700x500
 		// window size is used instead
+		Game g;
 		try {
-			new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1])).run();
+			g = new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		} catch (Exception e) {
-			new Game(700, 500).run();
+			g = new Game(700, 500);
 		}
+		g.run();
 	}
 }

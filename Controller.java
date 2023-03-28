@@ -13,7 +13,7 @@ class Controller implements MouseListener, KeyListener {
 	
 	// Booleans for Link movement, toggling edit mode
 	boolean keyUp, keyDown, keyLeft, keyRight;
-	public static boolean editOn;
+	public static boolean editOn, potOn;
 	
 	public Controller(Model m) {
 		this.model = m;
@@ -120,6 +120,12 @@ class Controller implements MouseListener, KeyListener {
 			// Toggle edit mode
 			case KeyEvent.VK_E: editOn = !editOn; break;
 
+			// Throw boomerang
+			case KeyEvent.VK_B:
+			case KeyEvent.VK_CONTROL: model.throwBoomerang(); break;
+			
+			case KeyEvent.VK_P: potOn = !potOn; break;
+
 			// Exit program
 			case KeyEvent.VK_Q:
 			case KeyEvent.VK_ESCAPE: System.exit(0); break;
@@ -137,15 +143,14 @@ class Controller implements MouseListener, KeyListener {
 
 		// Check each tile in ArrayList, if clicked on tile that already exists, remove tile and return
 		for (Sprite sprite : model.sprites) {
-			if (sprite.isTile() && ((Tile)sprite).isOnTile(x, y)) {
+			if ((sprite.isTile() || sprite.isPot()) && sprite.clickedOn(x, y)) {
 				model.sprites.remove(sprite);
 				return;
 			}
 		}
 
-		// If clicked on empty space, add tile to position of empty space
-		Tile tile = new Tile(x, y);
-		model.sprites.add(tile);
+		// If clicked on empty space, add either pot or tile to position of empty space
+		model.sprites.add((potOn) ? new Pot(x, y) : new Tile(x, y));
 	}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}

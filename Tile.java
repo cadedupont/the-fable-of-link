@@ -19,8 +19,8 @@ public class Tile extends Sprite {
 
     // Load data from Json file, set attributes of current tile
     public Tile(Json ob) {
-        this.x = (int) ob.getLong("x");
-        this.y = (int) ob.getLong("y");
+        this.x = (int) ob.getLong("tile_x");
+        this.y = (int) ob.getLong("tile_y");
         this.width = 50;
         this.height = 50;
 
@@ -34,7 +34,7 @@ public class Tile extends Sprite {
     // Print tile information
     @Override
     public String toString() {
-        return ("Tile (x, y) = (" + this.x + ", " + this.y + ")");
+        return "Tile (x, y) = (" + x + ", " + y + ")";
     }
 
     // Identify current Sprite as a tile
@@ -43,13 +43,15 @@ public class Tile extends Sprite {
         return true;
     }
 
-    public void update() {}
+    public boolean update() {
+        return true;
+    }
 
     // Marshal a tile's data to Json object
     public Json marshal() {
         Json ob = Json.newObject();
-        ob.add("x", x);
-        ob.add("y", y);
+        ob.add("tile_x", x);
+        ob.add("tile_y", y);
         return ob;
     }
 
@@ -59,10 +61,5 @@ public class Tile extends Sprite {
         if (x >= View.maxWidth && y < View.maxHeight) g.drawImage(redTile, x - scroll_x, y - scroll_y, null);
         if (x < View.maxWidth && y >= View.maxHeight) g.drawImage(purpleTile, x - scroll_x, y - scroll_y, null);
         if (x >= View.maxWidth && y >= View.maxHeight) g.drawImage(cyanTile, x - scroll_x, y - scroll_y, null);
-    }
-
-    // Check if parameter coordinates match a tile's coordinates
-    public boolean isOnTile(int x, int y) {
-        return (this.x == x && this.y == y);
     }
 }
