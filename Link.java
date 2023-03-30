@@ -14,11 +14,12 @@ enum Direction {
 
     public final int direction;
 
-    // Private constructor for assigning enums with integer values for reading array indices
+    // Private constructor for assigning enums with integer values for reading array
+    // indices
     private Direction(int direction) {
         this.direction = direction;
     }
-    
+
     // Convert enums to lowercase for reading image files
     @Override
     public String toString() {
@@ -84,7 +85,8 @@ public class Link extends Sprite {
 
     // Draw Link onto screen
     public void draw(Graphics g, int scroll_x, int scroll_y) {
-        // If link is moving, draw images for animation depending on direction of movement
+        // If link is moving, draw images for animation depending on direction of
+        // movement
         // Otherwise, draw still image in that direction
         if (isMoving)
             g.drawImage(linkMove[facing.direction][currImage], x - scroll_x, y - scroll_y, null);
@@ -106,7 +108,8 @@ public class Link extends Sprite {
         isMoving = true;
         currImage++;
 
-        // Checking if current image frame has exceeded max # of images used for animation
+        // Checking if current image frame has exceeded max # of images used for
+        // animation
         if (currImage >= MAX_MOVE_IMAGES)
             currImage = 0;
     }
@@ -118,7 +121,8 @@ public class Link extends Sprite {
     }
 
     // Function called when Link is colliding with a tile
-    // Based on which side of tile Link collided with, move Link back to previous position
+    // Based on which side of tile Link collided with, move Link back to previous
+    // position
     public void stopColliding(Sprite tile) {
         // Bottom side of Link colliding with upper side of tile
         if (y + height >= tile.y
@@ -126,7 +130,8 @@ public class Link extends Sprite {
             y = prev_y;
 
         // Upper side of Link colliding with lower side of tile
-        // Adding half of Link's height to y position to prevent Link's head from causing collision
+        // Adding half of Link's height to y position to prevent Link's head from
+        // causing collision
         if ((y + height / 2) <= tile.y + tile.height
                 && (prev_y + height / 2) >= tile.y + tile.height)
             y = prev_y;

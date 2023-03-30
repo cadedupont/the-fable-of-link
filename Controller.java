@@ -10,11 +10,11 @@ import java.awt.event.KeyEvent;
 class Controller implements MouseListener, KeyListener {
 	View view;
 	Model model;
-	
+
 	// Booleans for Link movement, toggling edit mode
 	boolean keyUp, keyDown, keyLeft, keyRight;
 	public static boolean editOn, potOn;
-	
+
 	public Controller(Model m) {
 		this.model = m;
 	}
@@ -24,14 +24,17 @@ class Controller implements MouseListener, KeyListener {
 	}
 
 	public void update() {
-		// If edit mode is currently active, leave function since function is only used for updating Link position
-		if (editOn) return;
+		// If edit mode is currently active, leave function since function is only used
+		// for updating Link position
+		if (editOn)
+			return;
 
 		// Save Link's previous position before updating
 		model.link.savePrev();
 
 		// If movement key is being pressed, then update Link's position
-		// Call function to update direction Link is facing, image being displayed for animation
+		// Call function to update direction Link is facing, image being displayed for
+		// animation
 		if (keyUp) {
 			model.link.y -= model.link.speed;
 			model.link.updateImage(Direction.UP);
@@ -47,18 +50,24 @@ class Controller implements MouseListener, KeyListener {
 		}
 
 		// If Link has moved to a new room, jump to room / update window
-		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight) view.scroll_y -= View.maxHeight;
-		if (model.link.y > View.maxHeight && view.scroll_y < View.maxHeight) view.scroll_y += View.maxHeight;
-		if (model.link.x < View.maxWidth && view.scroll_x > View.minWidth) view.scroll_x -= View.maxWidth;
-		if (model.link.x > View.maxWidth && view.scroll_x < View.maxWidth) view.scroll_x += View.maxWidth;
+		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight)
+			view.scroll_y -= View.maxHeight;
+		if (model.link.y > View.maxHeight && view.scroll_y < View.maxHeight)
+			view.scroll_y += View.maxHeight;
+		if (model.link.x < View.maxWidth && view.scroll_x > View.minWidth)
+			view.scroll_x -= View.maxWidth;
+		if (model.link.x > View.maxWidth && view.scroll_x < View.maxWidth)
+			view.scroll_x += View.maxWidth;
 	}
 
 	public void keyPressed(KeyEvent e) {
-		// Because function currently only takes Link movement into consideration, if edit is on, then arrow key movements
+		// Because function currently only takes Link movement into consideration, if
+		// edit is on, then arrow key movements
 		// don't need to be read, so leave function
-		if (editOn) return;
+		if (editOn)
+			return;
 
-		switch(e.getKeyCode()) {
+		switch (e.getKeyCode()) {
 			// If movement keys have been pressed, update corresponding boolean variables
 			// and set other key booleans to false to prevent diagonal movement
 			case KeyEvent.VK_UP:
@@ -66,34 +75,35 @@ class Controller implements MouseListener, KeyListener {
 				keyDown = false;
 				keyLeft = false;
 				keyRight = false;
-			break;
+				break;
 			case KeyEvent.VK_DOWN:
 				keyUp = false;
 				keyDown = true;
 				keyLeft = false;
 				keyRight = false;
-			break;
-			case KeyEvent.VK_LEFT: 
+				break;
+			case KeyEvent.VK_LEFT:
 				keyUp = false;
 				keyDown = false;
 				keyLeft = true;
 				keyRight = false;
-			break;
+				break;
 			case KeyEvent.VK_RIGHT:
 				keyUp = false;
 				keyDown = false;
 				keyLeft = false;
 				keyRight = true;
-			break;
+				break;
 		}
 	}
+
 	public void keyReleased(KeyEvent e) {
-		switch(e.getKeyCode()) {
+		switch (e.getKeyCode()) {
 			// If movement keys have been released, update corresponding boolean variables
 			case KeyEvent.VK_UP:
 				keyUp = false;
 				model.link.isMoving = false;
-			break;
+				break;
 			case KeyEvent.VK_DOWN:
 				keyDown = false;
 				model.link.isMoving = false;
@@ -101,50 +111,85 @@ class Controller implements MouseListener, KeyListener {
 			case KeyEvent.VK_LEFT:
 				keyLeft = false;
 				model.link.isMoving = false;
-			break;
+				break;
 			case KeyEvent.VK_RIGHT:
 				keyRight = false;
 				model.link.isMoving = false;
-			break;
+				break;
 
-			// If currently touching opposite border, update scroll position to desired border
-			case KeyEvent.VK_W: if (editOn && view.scroll_y == View.maxHeight) view.scroll_y -= View.maxHeight; break;
-			case KeyEvent.VK_X: if (editOn && view.scroll_y == View.minHeight) view.scroll_y += View.maxHeight; break;
-			case KeyEvent.VK_A: if (editOn && view.scroll_x == View.maxWidth) view.scroll_x -= View.maxWidth; break;
-			case KeyEvent.VK_D: if (editOn && view.scroll_x == View.minWidth) view.scroll_x += View.maxWidth; break;
+			// If currently touching opposite border, update scroll position to desired
+			// border
+			case KeyEvent.VK_W:
+				if (editOn && view.scroll_y == View.maxHeight)
+					view.scroll_y -= View.maxHeight;
+				break;
+			case KeyEvent.VK_X:
+				if (editOn && view.scroll_y == View.minHeight)
+					view.scroll_y += View.maxHeight;
+				break;
+			case KeyEvent.VK_A:
+				if (editOn && view.scroll_x == View.maxWidth)
+					view.scroll_x -= View.maxWidth;
+				break;
+			case KeyEvent.VK_D:
+				if (editOn && view.scroll_x == View.minWidth)
+					view.scroll_x += View.maxWidth;
+				break;
 
-			// Save current ArrayList of tiles to map.json / load tile locations from Json file into ArrayList
-			case KeyEvent.VK_S: model.marshal().save("map.json"); break;
-			case KeyEvent.VK_L: model.unmarshal(Json.load("map.json")); break;
+			// Save current ArrayList of tiles to map.json / load tile locations from Json
+			// file into ArrayList
+			case KeyEvent.VK_S:
+				model.marshal().save("map.json");
+				break;
+			case KeyEvent.VK_L:
+				model.unmarshal(Json.load("map.json"));
+				break;
 
 			// Toggle edit mode
-			case KeyEvent.VK_E: editOn = !editOn; break;
+			case KeyEvent.VK_E:
+				editOn = !editOn;
+				break;
 
 			// Throw boomerang
 			case KeyEvent.VK_B:
-			case KeyEvent.VK_CONTROL: model.throwBoomerang(); break;
-			
-			case KeyEvent.VK_P: potOn = !potOn; break;
+			case KeyEvent.VK_CONTROL:
+				if (!editOn)
+					model.throwBoomerang();
+				break;
+
+			// Toggle ability to place pots onto screen when in edit mode
+			case KeyEvent.VK_P:
+				if (editOn)
+					potOn = !potOn;
+				break;
 
 			// Exit program
 			case KeyEvent.VK_Q:
-			case KeyEvent.VK_ESCAPE: System.exit(0); break;
+			case KeyEvent.VK_ESCAPE:
+				System.exit(0);
+				break;
 		}
 	}
-	public void keyTyped(KeyEvent e) {}
+
+	public void keyTyped(KeyEvent e) {
+	}
 
 	public void mousePressed(MouseEvent e) {
 		// If editing mode is not turned on, leave function
-		if (!editOn) return;
+		if (!editOn)
+			return;
 
-		// Calculate position clicked - take into account scroll position, snapping tile to grid
-		int x = (e.getX() + view.scroll_x)  - ((e.getX() + view.scroll_x) % 50);
+		// Calculate position clicked - take into account scroll position, snapping tile
+		// to grid
+		int x = (e.getX() + view.scroll_x) - ((e.getX() + view.scroll_x) % 50);
 		int y = (e.getY() + view.scroll_y) - ((e.getY() + view.scroll_y) % 50);
 
-		// Check each tile in ArrayList, if clicked on tile that already exists, remove tile and return
+		// Check each tile in ArrayList, if clicked on tile that already exists, remove
+		// tile and return
 		for (Sprite sprite : model.sprites) {
-			if ((sprite.isTile() || sprite.isPot()) && sprite.clickedOn(x, y)) {
-				model.sprites.remove(sprite);
+			if (sprite.clickedOn(x, y)) {
+				if ((sprite.isPot() && potOn) || (sprite.isTile() && !potOn))
+					model.sprites.remove(sprite);
 				return;
 			}
 		}
@@ -152,8 +197,16 @@ class Controller implements MouseListener, KeyListener {
 		// If clicked on empty space, add either pot or tile to position of empty space
 		model.sprites.add((potOn) ? new Pot(x, y) : new Tile(x, y));
 	}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mouseClicked(MouseEvent e) {}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
 }

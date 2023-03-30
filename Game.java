@@ -28,10 +28,9 @@ public class Game extends JFrame {
 
 	public void run() {
 		while (true) {
-			// Only update Link movement if currently not in editing mode
 			controller.update();
 			model.update();
-			view.repaint(); 
+			view.repaint();
 
 			// Update screen
 			Toolkit.getDefaultToolkit().sync();

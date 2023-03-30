@@ -11,12 +11,13 @@ public class Boomerang extends Sprite {
     public static Image[] images;
     final int MAX_IMAGES = 4;
     int currImage = 0;
-    
+
     // Store boomerang movement speed, direction boomerang is moving
     final double speed = 7.5;
     Direction dirThrown;
 
-    // Constructor used when user presses either control or 'b' to create new boomerang object
+    // Constructor used when user presses either control or 'b' to create new
+    // boomerang object
     public Boomerang(int x, int y, Direction dir) {
         this.x = x;
         this.y = y;
@@ -37,19 +38,29 @@ public class Boomerang extends Sprite {
         return "Boomerang (x, y) = (" + x + ", " + y + ")";
     }
 
-    // Check whether the current sprite is a boomerang; if it's an instance of this class, it will return true
+    // Check whether the current sprite is a boomerang; if it's an instance of this
+    // class, it will return true
     @Override
     public boolean isBoomerang() {
         return true;
     }
 
-    // Move boomerang in the direction it's been thrown, cycle through images for animating boomerang movement
+    // Move boomerang in the direction it's been thrown, cycle through images for
+    // animating boomerang movement
     public boolean update() {
-        switch(dirThrown) {
-            case UP: y -= speed; break;
-            case DOWN: y += speed; break;
-            case LEFT: x -= speed; break;
-            case RIGHT: x += speed; break;
+        switch (dirThrown) {
+            case UP:
+                y -= speed;
+                break;
+            case DOWN:
+                y += speed;
+                break;
+            case LEFT:
+                x -= speed;
+                break;
+            case RIGHT:
+                x += speed;
+                break;
         }
 
         currImage++;

@@ -19,7 +19,8 @@ public abstract class Sprite {
         return (this.x == x && this.y == y);
     }
 
-    // Check if a sprite is an instance of a certain class; will return false for all classes it's not an instance of
+    // Check if a sprite is an instance of a certain class; will return false for
+    // all classes it's not an instance of
     public boolean isTile() {
         return false;
     }

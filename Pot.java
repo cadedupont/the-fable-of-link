@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 public class Pot extends Sprite {
-
     // Store pot images
     public static Image broken, whole;
 
@@ -14,7 +13,7 @@ public class Pot extends Sprite {
     public boolean isBroken;
 
     // Direction pot will slide if Link collided with it
-    public Direction dirSliding;
+    public Direction sliding;
 
     // Countdown for displaying broken pot image before removing it
     public int countdown = 75;
@@ -30,24 +29,28 @@ public class Pot extends Sprite {
         this.height = 48;
     }
 
-    // Unmarshalling constructor; loads pot locations from JSON file and loads pot images if they haven't been loaded yet
+    // Unmarshalling constructor; loads pot locations from JSON file and loads pot
+    // images if they haven't been loaded yet
     public Pot(Json ob) {
-        this.x = (int)ob.getLong("pot_x");
-        this.y = (int)ob.getLong("pot_y");
+        this.x = (int) ob.getLong("pot_x");
+        this.y = (int) ob.getLong("pot_y");
         this.width = 48;
         this.height = 48;
 
-        if (broken == null) broken = View.loadImage("img/pots/broken.png");
-        if (whole == null) whole = View.loadImage("img/pots/whole.png");
+        if (broken == null)
+            broken = View.loadImage("img/pots/broken.png");
+        if (whole == null)
+            whole = View.loadImage("img/pots/whole.png");
     }
-    
+
     // Return pot information
     @Override
     public String toString() {
         return "Pot (x, y) = (" + x + ", " + y + ")";
     }
 
-    // Check if the current sprite is a pot; will return true if the sprite is an instance of this class
+    // Check if the current sprite is a pot; will return true if the sprite is an
+    // instance of this class
     @Override
     public boolean isPot() {
         return true;
@@ -56,12 +59,20 @@ public class Pot extends Sprite {
     // Depending on the direction Link collided with the pot, move the pot
     // If the pot was broken, begin the countdown
     public boolean update() {
-        if (dirSliding != null) {
-            switch(dirSliding) {
-                case UP: y -= speed; break;
-                case DOWN: y += speed; break;
-                case LEFT: x -= speed; break;
-                case RIGHT: x += speed; break;
+        if (sliding != null) {
+            switch (sliding) {
+                case UP:
+                    y -= speed;
+                    break;
+                case DOWN:
+                    y += speed;
+                    break;
+                case LEFT:
+                    x -= speed;
+                    break;
+                case RIGHT:
+                    x += speed;
+                    break;
             }
         }
 
@@ -72,7 +83,8 @@ public class Pot extends Sprite {
         return true;
     }
 
-    // Draw pot image to the screen; if the pot is broken, display the broken pot image
+    // Draw pot image to the screen; if the pot is broken, display the broken pot
+    // image
     public void draw(Graphics g, int scroll_x, int scroll_y) {
         if (isBroken)
             g.drawImage(broken, x - scroll_x, y - scroll_y, null);

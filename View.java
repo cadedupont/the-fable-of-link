@@ -43,7 +43,7 @@ class View extends JPanel {
 		int right = maxWidth - scroll_x;
 		int top = minHeight - scroll_y;
 		int bottom = maxHeight - scroll_y;
-		
+
 		// Green, top left quadrant
 		g.setColor(new Color(146, 220, 167));
 		g.fillRect(left, top, maxWidth, maxHeight);
@@ -69,7 +69,8 @@ class View extends JPanel {
 		if (Controller.editOn) {
 			g.setColor(new Color(255, 255, 0));
 			g.setFont(new Font("Default", Font.BOLD, 24));
-			g.drawString((Controller.potOn) ? "Pots enabled" : "Tiles enabled", (View.maxWidth / 2) - 65, View.maxHeight - 17);
+			g.drawString((Controller.potOn) ? "Pots enabled" : "Tiles enabled",
+					(View.maxWidth / 2) - 65, View.maxHeight - 17);
 			g.drawString("Edit mode enabled", (View.maxWidth / 2) - 95, View.maxHeight - 50);
 		}
 	}
