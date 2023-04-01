@@ -17,32 +17,38 @@ public class Model {
 
 	public void update() {
 		// If currently in edit mode, don't update any sprites
-		if (Controller.editOn)
-			return;
+		if (Controller.editOn) return;
 
-		// Using iterator to allow for removing elements of the ArrayList while
-		// iterating
+		// Using iterator to allow for removing elements of the ArrayList while iterating
 		Iterator<Sprite> it = sprites.iterator();
 		while (it.hasNext()) {
 			Sprite sprite1 = it.next();
 
 			// Update sprites
-			boolean isValid = sprite1.update();
-			if (!isValid) {
+			if (!sprite1.update()) {
 				it.remove();
 				continue;
 			}
 
+			// Check each sprite for collision against the first sprite
+			// If colliding, perform action and break out of inner loop
 			for (Sprite sprite2 : sprites) {
 				if (isColliding(sprite1, sprite2)) {
+					// System.out.println(sprite2.toString());
 					// If Link is colliding with a tile, move Link out of the tile
 					if (sprite1.isLink() && sprite2.isTile())
 						((Link)sprite1).stopColliding(sprite2);
+
+					else if (sprite1.isTile() && sprite2.isLink())
+						((Link)sprite2).stopColliding(sprite1);
 
 					// If Link is colliding with a pot, begin sliding the pot in the direction Link
 					// is facing
 					else if ((sprite1.isLink() && sprite2.isPot()) && !((Pot)sprite2).isBroken)
 						((Pot)sprite2).sliding = ((Link)sprite1).facing;
+
+					else if ((sprite1.isPot() && sprite2.isLink()) && !((Pot)sprite1).isBroken)
+						((Pot)sprite1).sliding = ((Link)sprite2).facing;
 
 					// If a boomerang is colliding with a tile, remove the boomerang from the Sprite
 					// ArrayList
@@ -64,7 +70,7 @@ public class Model {
 						((Pot)sprite1).sliding = null;
 					}
 
-					// If a sliding pot collides with a still pot, break both pots
+					// If two pots collide, break both pots and stop movement
 					else if ((sprite1.isPot() && sprite2.isPot()) && sprite1 != sprite2) {
 						((Pot)sprite1).isBroken = true;
 						((Pot)sprite2).isBroken = true;

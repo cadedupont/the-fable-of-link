@@ -26,10 +26,9 @@ class Controller implements MouseListener, KeyListener {
 	public void update() {
 		// If edit mode is currently active, leave function since function is only used
 		// for updating Link position
-		if (editOn)
-			return;
+		if (editOn) return;
 
-		// Save Link's previous position before updating
+		// Save Link's previous position before updating for collision fixing
 		model.link.savePrev();
 
 		// If movement key is being pressed, then update Link's position
@@ -50,14 +49,10 @@ class Controller implements MouseListener, KeyListener {
 		}
 
 		// If Link has moved to a new room, jump to room / update window
-		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight)
-			view.scroll_y -= View.maxHeight;
-		if (model.link.y > View.maxHeight && view.scroll_y < View.maxHeight)
-			view.scroll_y += View.maxHeight;
-		if (model.link.x < View.maxWidth && view.scroll_x > View.minWidth)
-			view.scroll_x -= View.maxWidth;
-		if (model.link.x > View.maxWidth && view.scroll_x < View.maxWidth)
-			view.scroll_x += View.maxWidth;
+		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight) view.scroll_y -= View.maxHeight;
+		if (model.link.y > View.maxHeight && view.scroll_y < View.maxHeight) view.scroll_y += View.maxHeight;
+		if (model.link.x < View.maxWidth && view.scroll_x > View.minWidth) view.scroll_x -= View.maxWidth;
+		if (model.link.x > View.maxWidth && view.scroll_x < View.maxWidth) view.scroll_x += View.maxWidth;
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -176,16 +171,15 @@ class Controller implements MouseListener, KeyListener {
 
 	public void mousePressed(MouseEvent e) {
 		// If editing mode is not turned on, leave function
-		if (!editOn)
-			return;
+		if (!editOn) return;
 
 		// Calculate position clicked - take into account scroll position, snapping tile
 		// to grid
 		int x = (e.getX() + view.scroll_x) - ((e.getX() + view.scroll_x) % 50);
 		int y = (e.getY() + view.scroll_y) - ((e.getY() + view.scroll_y) % 50);
 
-		// Check each tile in ArrayList, if clicked on tile that already exists, remove
-		// tile and return
+		// Check each sprite in ArrayList, if clicked on tile or pot that already exists, remove
+		// tile or pot and return
 		for (Sprite sprite : model.sprites) {
 			if (sprite.clickedOn(x, y)) {
 				if ((sprite.isPot() && potOn) || (sprite.isTile() && !potOn))

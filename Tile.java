@@ -17,14 +17,10 @@ public class Tile extends Sprite {
         this.height = 50;
 
         // Lazy loading for tile images
-        if (greenTile == null)
-            greenTile = View.loadImage("img/tiles/green.jpg");
-        if (redTile == null)
-            redTile = View.loadImage("img/tiles/red.jpg");
-        if (purpleTile == null)
-            purpleTile = View.loadImage("img/tiles/purple.jpg");
-        if (cyanTile == null)
-            cyanTile = View.loadImage("img/tiles/cyan.jpg");
+        if (greenTile == null) greenTile = View.loadImage("img/tiles/green.jpg");
+        if (redTile == null) redTile = View.loadImage("img/tiles/red.jpg");
+        if (purpleTile == null) purpleTile = View.loadImage("img/tiles/purple.jpg");
+        if (cyanTile == null) cyanTile = View.loadImage("img/tiles/cyan.jpg");
     }
 
     // Load data from Json file, set attributes of current tile
@@ -35,14 +31,10 @@ public class Tile extends Sprite {
         this.height = 50;
 
         // Lazy loading for tile images
-        if (greenTile == null)
-            greenTile = View.loadImage("img/tiles/green.jpg");
-        if (redTile == null)
-            redTile = View.loadImage("img/tiles/red.jpg");
-        if (purpleTile == null)
-            purpleTile = View.loadImage("img/tiles/purple.jpg");
-        if (cyanTile == null)
-            cyanTile = View.loadImage("img/tiles/cyan.jpg");
+        if (greenTile == null) greenTile = View.loadImage("img/tiles/green.jpg");
+        if (redTile == null) redTile = View.loadImage("img/tiles/red.jpg");
+        if (purpleTile == null) purpleTile = View.loadImage("img/tiles/purple.jpg");
+        if (cyanTile == null) cyanTile = View.loadImage("img/tiles/cyan.jpg");
     }
 
     // Print tile information
@@ -71,13 +63,9 @@ public class Tile extends Sprite {
 
     // Draw tile image onto screen; different color based on tile position
     public void draw(Graphics g, int scroll_x, int scroll_y) {
-        if (x < View.maxWidth && y < View.maxHeight)
-            g.drawImage(greenTile, x - scroll_x, y - scroll_y, null);
-        if (x >= View.maxWidth && y < View.maxHeight)
-            g.drawImage(redTile, x - scroll_x, y - scroll_y, null);
-        if (x < View.maxWidth && y >= View.maxHeight)
-            g.drawImage(purpleTile, x - scroll_x, y - scroll_y, null);
-        if (x >= View.maxWidth && y >= View.maxHeight)
-            g.drawImage(cyanTile, x - scroll_x, y - scroll_y, null);
+        if (x < View.maxWidth && y < View.maxHeight) g.drawImage(greenTile, x - scroll_x, y - scroll_y, null);
+        if (x >= View.maxWidth && y < View.maxHeight) g.drawImage(redTile, x - scroll_x, y - scroll_y, null);
+        if (x < View.maxWidth && y >= View.maxHeight) g.drawImage(purpleTile, x - scroll_x, y - scroll_y, null);
+        if (x >= View.maxWidth && y >= View.maxHeight) g.drawImage(cyanTile, x - scroll_x, y - scroll_y, null);
     }
 }

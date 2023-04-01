@@ -65,6 +65,7 @@ class View extends JPanel {
 			sprite.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
+		// Indicate whether user is currently placing pots or tiles
 		// Hard-coding text position on screen
 		if (Controller.editOn) {
 			g.setColor(new Color(255, 255, 0));

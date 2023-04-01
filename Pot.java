@@ -27,6 +27,9 @@ public class Pot extends Sprite {
         this.y = y;
         this.width = 48;
         this.height = 48;
+
+        if (broken == null) broken = View.loadImage("img/pots/broken.png");
+        if (whole == null) whole = View.loadImage("img/pots/whole.png");
     }
 
     // Unmarshalling constructor; loads pot locations from JSON file and loads pot
@@ -37,10 +40,8 @@ public class Pot extends Sprite {
         this.width = 48;
         this.height = 48;
 
-        if (broken == null)
-            broken = View.loadImage("img/pots/broken.png");
-        if (whole == null)
-            whole = View.loadImage("img/pots/whole.png");
+        if (broken == null) broken = View.loadImage("img/pots/broken.png");
+        if (whole == null) whole = View.loadImage("img/pots/whole.png");
     }
 
     // Return pot information
