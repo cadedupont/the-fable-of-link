@@ -79,18 +79,13 @@ public class Pot extends Sprite {
 
         if (isBroken)
             countdown--;
-        if (countdown <= 0)
-            return false;
-        return true;
+        return !(countdown <= 0);
     }
 
     // Draw pot image to the screen; if the pot is broken, display the broken pot
     // image
     public void draw(Graphics g, int scroll_x, int scroll_y) {
-        if (isBroken)
-            g.drawImage(broken, x - scroll_x, y - scroll_y, null);
-        else
-            g.drawImage(whole, x - scroll_x, y - scroll_y, null);
+        g.drawImage((isBroken) ? broken : whole, x - scroll_x, y - scroll_y, null);
     }
 
     // Marshal pot object information into a Json object

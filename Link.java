@@ -86,10 +86,7 @@ public class Link extends Sprite {
     public void draw(Graphics g, int scroll_x, int scroll_y) {
         // If link is moving, draw images for animation depending on direction of movement
         // Otherwise, draw still image in that direction
-        if (isMoving)
-            g.drawImage(linkMove[facing.direction][currImage], x - scroll_x, y - scroll_y, null);
-        else
-            g.drawImage(linkStill[facing.direction], x - scroll_x, y - scroll_y, null);
+        g.drawImage((isMoving) ? linkMove[facing.direction][currImage] : linkStill[facing.direction], x - scroll_x, y - scroll_y, null);
     }
 
     // Marshal Link data into Json object
@@ -104,11 +101,9 @@ public class Link extends Sprite {
     public void updateImage(Direction dir) {
         facing = dir;
         isMoving = true;
-        currImage++;
 
         // Checking if current image frame has exceeded max # of images used for animation
-        if (currImage >= MAX_MOVE_IMAGES)
-            currImage = 0;
+        currImage = (currImage + 1) % MAX_MOVE_IMAGES;
     }
 
     // Store Link's previous position before movement for collision fixing
