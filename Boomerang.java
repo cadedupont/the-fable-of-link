@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 public class Boomerang extends Sprite {
-
     // Store boomerang images
     public static Image[] images;
     final int MAX_IMAGES = 4;
@@ -63,10 +62,7 @@ public class Boomerang extends Sprite {
                 break;
         }
 
-        currImage++;
-        if (currImage >= MAX_IMAGES)
-            currImage = 0;
-
+        currImage = (currImage + 1) % MAX_IMAGES;
         return true;
     }
 

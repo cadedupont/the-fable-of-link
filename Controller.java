@@ -165,9 +165,8 @@ class Controller implements MouseListener, KeyListener {
 				break;
 		}
 	}
-
-	public void keyTyped(KeyEvent e) {
-	}
+	
+	public void keyTyped(KeyEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
 		// If editing mode is not turned on, leave function
@@ -192,15 +191,8 @@ class Controller implements MouseListener, KeyListener {
 		model.sprites.add((potOn) ? new Pot(x, y) : new Tile(x, y));
 	}
 
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	public void mouseExited(MouseEvent e) {
-	}
-
-	public void mouseClicked(MouseEvent e) {
-	}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {}
 }
