@@ -48,18 +48,10 @@ public class Boomerang extends Sprite {
     // animating boomerang movement
     public boolean update() {
         switch (dirThrown) {
-            case UP:
-                y -= speed;
-                break;
-            case DOWN:
-                y += speed;
-                break;
-            case LEFT:
-                x -= speed;
-                break;
-            case RIGHT:
-                x += speed;
-                break;
+            case UP -> y -= speed;
+            case DOWN -> y += speed;
+            case LEFT -> x -= speed;
+            case RIGHT -> x += speed;
         }
 
         currImage = (currImage + 1) % MAX_IMAGES;

@@ -62,18 +62,10 @@ public class Pot extends Sprite {
     public boolean update() {
         if (sliding != null) {
             switch (sliding) {
-                case UP:
-                    y -= speed;
-                    break;
-                case DOWN:
-                    y += speed;
-                    break;
-                case LEFT:
-                    x -= speed;
-                    break;
-                case RIGHT:
-                    x += speed;
-                    break;
+                case UP -> y -= speed;
+                case DOWN -> y += speed;
+                case LEFT -> x -= speed;
+                case RIGHT -> x += speed;
             }
         }
 

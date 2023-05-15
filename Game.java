@@ -17,7 +17,7 @@ public class Game extends JFrame {
 		view.addMouseListener(controller);
 		this.addKeyListener(controller);
 		this.setSize(width, height);
-		this.setTitle("A5 - Adding Sprites");
+		this.setTitle("The Fable of Link");
 		this.setFocusable(true);
 		this.getContentPane().add(view);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

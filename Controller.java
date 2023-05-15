@@ -162,7 +162,6 @@ class Controller implements MouseListener, KeyListener {
 			case KeyEvent.VK_Q:
 			case KeyEvent.VK_ESCAPE:
 				System.exit(0);
-				break;
 		}
 	}
 	
@@ -177,18 +176,25 @@ class Controller implements MouseListener, KeyListener {
 		int x = (e.getX() + view.scroll_x) - ((e.getX() + view.scroll_x) % 50);
 		int y = (e.getY() + view.scroll_y) - ((e.getY() + view.scroll_y) % 50);
 
-		// Check each sprite in ArrayList, if clicked on tile or pot that already exists, remove
-		// tile or pot and return
+		// Check if a sprite has been clicked on
 		for (Sprite sprite : model.sprites) {
-			if (sprite.clickedOn(x, y)) {
-				if ((sprite.isPot() && potOn) || (sprite.isTile() && !potOn))
-					model.sprites.remove(sprite);
-				return;
+			// If the current sprite is not a Link, check if snapped position of click is not occupied
+			// by a tile or pot. Don't remove tile if in pot mode and vice versa.
+			if (!sprite.isLink())
+				if (sprite.clickedOn(x, y)) {
+					if ((sprite.isPot() && Controller.potOn) || (sprite.isTile() && !Controller.potOn))
+						model.sprites.remove(sprite);
+					return;
+			// If current sprite is a Link, check if Link would be colliding with a tile if
+			// it were placed. If so, do nothing
+			} else {
+				if (model.isColliding(model.link, new Tile(x, y)))
+					return;
 			}
 		}
 
 		// If clicked on empty space, add either pot or tile to position of empty space
-		model.sprites.add((potOn) ? new Pot(x, y) : new Tile(x, y));
+		model.sprites.add(0, (potOn) ? new Pot(x, y) : new Tile(x, y));
 	}
 
 	public void mouseReleased(MouseEvent e) {}
