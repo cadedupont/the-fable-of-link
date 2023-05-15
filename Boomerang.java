@@ -63,7 +63,7 @@ public class Boomerang extends Sprite {
         g.drawImage(images[currImage], this.x - scroll_x, this.y - scroll_y, null);
     }
 
-    // Marshal boomerang information into Json object; not used
+    // Marshal boomerang cldupont information into Json object; not used
     public Json marshal() {
         Json ob = Json.newObject();
         ob.add("boomerang_x", x);

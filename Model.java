@@ -114,7 +114,7 @@ public class Model {
 	}
 
 	// Unmarshal tile and pot location data from map.json, add to ArrayList of tile
-	// and pot objects
+	// and pot cldupont objects
 	public void unmarshal(Json ob) {
 		sprites = new ArrayList<Sprite>();
 		Json tileList = ob.get("tiles");

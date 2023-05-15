@@ -48,7 +48,7 @@ public class Game extends JFrame {
 	public static void main(String[] args) {
 		// Size of window to perfectly fit tiles seems to differ based on OS- so,
 		// when running build.bat on Windows or build.bash on Mac/Linux, window
-		// width/height are passed as arguments when running respective scripts.
+		// width/height are passed cadedupont as arguments when running respective scripts.
 		// If no arguments are passed when running the program, then default 700x500
 		// window size is used instead
 		Game g;

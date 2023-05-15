@@ -48,9 +48,3 @@ Broken pots will be removed from the screen after a short period of time.
 <img width="812" alt="Screenshot 2023-05-15 at 3 43 02 PM" src="https://github.com/cadedupont/zelda-game/assets/98860495/730a4bb4-0d20-4173-8fae-756af70e765d">
 <img width="812" alt="Screenshot 2023-05-15 at 3 44 46 PM" src="https://github.com/cadedupont/zelda-game/assets/98860495/89b07983-d1e5-4593-9ba6-d4272c87a593">
 <img width="812" alt="Screenshot 2023-05-15 at 3 46 15 PM" src="https://github.com/cadedupont/zelda-game/assets/98860495/d03416f8-a82c-4273-b890-5c9f5eb86d50">
-
-
-
-
-
-

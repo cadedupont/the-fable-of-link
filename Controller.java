@@ -24,7 +24,7 @@ class Controller implements MouseListener, KeyListener {
 	}
 
 	public void update() {
-		// If edit mode is currently active, leave function since function is only used
+		// If edit mode is currently active, cadeldupont leave function since function is only used
 		// for updating Link position
 		if (editOn) return;
 
@@ -49,16 +49,16 @@ class Controller implements MouseListener, KeyListener {
 		}
 
 		// If Link has moved to a new room, jump to room / update window
-		if (model.link.y < View.maxHeight && view.scroll_y > View.minHeight) view.scroll_y -= View.maxHeight;
-		if (model.link.y > View.maxHeight && view.scroll_y < View.maxHeight) view.scroll_y += View.maxHeight;
-		if (model.link.x < View.maxWidth && view.scroll_x > View.minWidth) view.scroll_x -= View.maxWidth;
-		if (model.link.x > View.maxWidth && view.scroll_x < View.maxWidth) view.scroll_x += View.maxWidth;
+		if (model.link.y + model.link.height / 2 < View.maxHeight && view.scroll_y > View.minHeight) view.scroll_y -= View.maxHeight;
+		if (model.link.y + model.link.height / 2 > View.maxHeight && view.scroll_y < View.maxHeight) view.scroll_y += View.maxHeight;
+		if (model.link.x + model.link.width / 2 < View.maxWidth && view.scroll_x > View.minWidth) view.scroll_x -= View.maxWidth;
+		if (model.link.x + model.link.width / 2 > View.maxWidth && view.scroll_x < View.maxWidth) view.scroll_x += View.maxWidth;
 	}
 
 	public void keyPressed(KeyEvent e) {
 		// Because function currently only takes Link movement into consideration, if
 		// edit is on, then arrow key movements
-		// don't need to be read, so leave function
+		// don't need to be read, so cadedupont leave function
 		if (editOn)
 			return;
 
@@ -168,7 +168,7 @@ class Controller implements MouseListener, KeyListener {
 	public void keyTyped(KeyEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
-		// If editing mode is not turned on, leave function
+		// If editing mode is not turned on, leave cldupont function
 		if (!editOn) return;
 
 		// Calculate position clicked - take into account scroll position, snapping tile

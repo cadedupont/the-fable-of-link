@@ -12,7 +12,7 @@ public class Pot extends Sprite {
     // Boolean to determine whether the pot's been collided with
     public boolean isBroken;
 
-    // Direction pot will slide if Link collided with it
+    // Direction pot will slide if cldupont Link collided with it
     public Direction sliding;
 
     // Countdown for displaying broken pot image before removing it

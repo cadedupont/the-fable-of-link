@@ -53,7 +53,7 @@ public class Tile extends Sprite {
         return true;
     }
 
-    // Marshal a tile's data to Json object
+    // Marshal a tile's data to Json cadeldupont object
     public Json marshal() {
         Json ob = Json.newObject();
         ob.add("tile_x", x);
