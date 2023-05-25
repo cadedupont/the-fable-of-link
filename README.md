@@ -4,18 +4,20 @@ A labyrinth-style game written in Java.
 ---
 
 ### To Run:<br>
-The following build scripts are included to run the game:<br>
-`build.bash` <b>for MacOS/Linux</b><br>
-`build.bat` <b>for Windows</b><br><br>
+The following files are included in the `scripts` folder to run the game:<br>
+`build.sh` <b>for MacOS/Linux</b><br>
+`build.bat` <b>for Windows</b><br>
 
-Different build scripts are included to ensure that the tile sprites perfectly fit within the provided window.<br>
+Different build scripts are included based on OS to ensure that the tile images fit perfectly within the game window.<br>
+`build.sh` uses the `bash` shell and `build.bat` uses the `cmd` shell.<br>
+
 Before executing one of the scripts, run the following command in the terminal at the root directory of the game's folder:<br>
-`chmod u+x build.bash` or `chmod u+x build.bat`<br>
-This adds executable permissions for the user.<br><br>
+`chmod u+x scripts/build.sh` or `chmod u+x scripts/build.bat`<br>
+This adds executable permissions for the user.<br>
 
 Then, run the following command in the terminal at the root directory of the game's folder:<br>
-`./build.bash` or `build.bat`<br>
-To begin playing the game.<br>
+`./scripts/build.sh` or `scripts/build.bat`<br>
+To begin playing the game. Compiled class files will be placed in the `bin` folder.<br>
 
 If neither script is used to run the game, a default window size will be provided automatically.<br>
 

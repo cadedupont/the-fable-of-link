@@ -22,7 +22,7 @@ class View extends JPanel {
 		c.setView(this);
 
 		// Load tile images onto screen automatically
-		model.unmarshal(Json.load("map.json"));
+		model.unmarshal(Json.load("src/map.json"));
 	}
 
 	// Method for loading image passed as argument

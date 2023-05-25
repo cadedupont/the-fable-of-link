@@ -134,10 +134,10 @@ class Controller implements MouseListener, KeyListener {
 			// Save current ArrayList of tiles to map.json / load tile locations from Json
 			// file into ArrayList
 			case KeyEvent.VK_S:
-				model.marshal().save("map.json");
+				model.marshal().save("src/map.json");
 				break;
 			case KeyEvent.VK_L:
-				model.unmarshal(Json.load("map.json"));
+				model.unmarshal(Json.load("src/map.json"));
 				break;
 
 			// Toggle edit mode
