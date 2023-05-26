@@ -11,9 +11,10 @@ The following files are included in the `scripts` folder to run the game:<br>
 Different build scripts are included based on OS to ensure that the tile images fit perfectly within the game window.<br>
 `build.sh` uses the `bash` shell and `build.bat` uses the `cmd` shell.<br>
 
-Before executing one of the scripts, run the following command in the terminal at the root directory of the game's folder:<br>
-`chmod u+x scripts/build.sh` or `chmod u+x scripts/build.bat`<br>
-This adds executable permissions for the user.<br>
+Before executing one of the scripts, you'll have to add executable permissions to the file for the user.<br>
+For MacOS, you can run the following command in the terminal:
+`chmod u+x path/to/build.sh`<br>
+For Windows, `.bat` files should be executable by default. If it's not, you can right-click on the `.bat` file, click `Properties`, and add the corresponding permissions from there.
 
 Then, run the following command in the terminal at the root directory of the game's folder:<br>
 `./scripts/build.sh` or `scripts/build.bat`<br>
