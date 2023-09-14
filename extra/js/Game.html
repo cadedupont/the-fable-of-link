@@ -1,0 +1,677 @@
+<!-- Name: Cade DuPont
+Date: 04.22.23
+Description: Porting Link Game to JavaScript -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A7 - Porting Link Game to JavaScript</title>
+        <canvas width="700" height="500" id="window"></canvas>
+        
+        <style>
+            html {
+                height: 100%;
+            }
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-style: italic;
+                color: #ffffff;
+            }
+            canvas {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: 10px solid #ffffff; 
+            }
+            #edit_mode {
+                text-align: center;
+                position: absolute;
+                top: 8%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="edit_mode">
+            <h3 id="edit_text" style="color: yellow;"></h3>
+            <img id="placing_image" src=""/>
+        </div>
+        
+        <script type="text/javascript">
+            // Written object-oriented instead of functionally using prototypes because I couldn't figure it out :(
+            directions = {
+                "UP": 0,
+                "DOWN": 1,
+                "LEFT": 2,
+                "RIGHT": 3,
+            };
+
+            class Sprite {
+                constructor(x, y, width, height) {
+                    this.x = x;
+                    this.y = y;
+                    this.width = width;
+                    this.height = height;
+                }
+
+                draw(scroll_x, scroll_y) {}
+                update() {}
+
+                isClicked(x, y) {
+                    return (this.x == x && this.y == y);
+                }
+            }
+
+            class Tile extends Sprite {
+                static greenTile = undefined;
+                static redTile = undefined;
+                static purpleTile = undefined;
+                static cyanTile = undefined;
+
+                constructor(x, y) {
+                    // Call Sprite constructor for setting tile's initial position, width, and height
+                    super(x, y, 50, 50);
+
+                    // Load different color tile image based on room tile is placed
+                    if (Tile.greenTile === undefined) Tile.greenTile = View.loadImage("../../img/tiles/green.jpg");
+                    if (Tile.redTile === undefined) Tile.redTile = View.loadImage("../../img/tiles/red.jpg");
+                    if (Tile.purpleTile === undefined) Tile.purpleTile = View.loadImage("../../img/tiles/purple.jpg");
+                    if (Tile.cyanTile === undefined) Tile.cyanTile = View.loadImage("../../img/tiles/cyan.jpg");
+                }
+
+                toString = () => "Tile (x, y) = (" + this.x + ", " + this.y + ")";
+
+                update() {
+                    return true;
+                }
+
+                draw(scroll_x, scroll_y) {
+                    // Draw different color tile image based on room tile is placed
+                    if (this.x < View.canvasWidth && this.y < View.canvasHeight) View.context.drawImage(Tile.greenTile, this.x - scroll_x, this.y - scroll_y);
+                    if (this.x >= View.canvasWidth && this.y < View.canvasHeight) View.context.drawImage(Tile.redTile, this.x - scroll_x, this.y - scroll_y);
+                    if (this.x < View.canvasWidth && this.y >= View.canvasHeight) View.context.drawImage(Tile.purpleTile, this.x - scroll_x, this.y - scroll_y);
+                    if (this.x >= View.canvasWidth && this.y >= View.canvasHeight) View.context.drawImage(Tile.cyanTile, this.x - scroll_x, this.y - scroll_y);
+                }
+            }
+
+            class Link extends Sprite {
+                static walkImages = undefined;
+                static stillImages = undefined;
+
+                constructor() {
+                    // Call Sprite constructor for setting Link's initial position, width, and height
+                    super(173, 102, 78, 85);
+
+                    // Declare Link's previous position for collision fixing
+                    this.prev_x = 0;
+                    this.prev_y = 0;
+
+                    // Declare Link's speed, movement status, and direction
+                    this.speed = 7.5;
+                    this.isMoving = false;
+                    this.direction = directions.DOWN;
+
+                    // Load Link's movement images
+                    if (Link.walkImages === undefined) {
+                        Link.walkImages = [4];
+                        for (let i = 0; i < 4; i++) {
+                            Link.walkImages[i] = [10];
+                            for (let j = 0; j < 10; j++)
+                                Link.walkImages[i][j] = View.loadImage("../../img/link/" + Object.keys(directions)[i].toLowerCase() + "/" + j + ".png");
+                        }
+                    }
+                    
+                    // Load Link's still images
+                    if (Link.stillImages === undefined) {
+                        Link.stillImages = [4];
+                        for (let i = 0; i < 4; i++)
+                            Link.stillImages[i] = View.loadImage("../../img/link/still/" + i + ".png");
+                    }
+
+                    // Declare variable for current image being drawn, create animation
+                    this.currImage = 0;
+                }
+
+                toString = () => "Link (x, y) = (" + this.x + ", " + this.y + ")";
+
+                update() {
+                    return true;
+                }
+
+                draw(scroll_x, scroll_y) {
+                    View.context.drawImage((this.isMoving) ? Link.walkImages[this.direction][this.currImage] : Link.stillImages[this.direction], this.x - scroll_x, this.y - scroll_y);
+                }
+
+                // Save Link's previous position for collision fixing
+                savePrev() {
+                    this.prev_x = this.x;
+                    this.prev_y = this.y;
+                }
+
+                // Animate Link in direction of movement
+                cycleImage(direction) {
+                    this.direction = direction;
+                    this.isMoving = true;
+                    this.currImage = (this.currImage + 1) % 10;
+                }
+
+                // If Link is colliding with a tile, move him back to his previous position
+                stopColliding(tile) {
+                    // Bottom side of Link colliding with upper side of tile
+                    if (this.y + this.height >= tile.y
+                            && this.prev_y + this.height <= tile.y)
+                        this.y = this.prev_y;
+                    
+                    // Upper side of Link colliding with lower side of tile
+                    // Adding half of Link's height to y position to prevent Link's head from
+                    // causing collision
+                    if ((this.y + this.height / 2) <= tile.y + tile.height
+                            && (this.prev_y + this.height / 2) >= tile.y + tile.height)
+                        this.y = this.prev_y;
+
+                    // Right side of Link colliding with left side of tile
+                    if ((this.x + this.width) >= tile.x
+                            && (this.prev_x + this.width) <= tile.x)
+                        this.x = this.prev_x;
+
+                    // Left side of Link colliding with right side of tile
+                    if (this.x <= tile.x + tile.width
+                            && this.prev_x >= tile.x + tile.width)
+                        this.x = this.prev_x;
+                }
+            }
+
+            class Boomerang extends Sprite {
+                static images = undefined;
+
+                constructor(x, y, direction) {
+                    // Call Sprite constructor for setting boomerang's initial position, width, and height
+                    super(x, y, 10, 10);
+
+                    // Declare boomerang's speed and direction
+                    this.speed = 7.5;
+                    this.direction = direction;
+                    
+                    // Load boomerang images into array
+                    if (Boomerang.images === undefined) {
+                        Boomerang.images = [4];
+                        for (let i = 0; i < 4; i++)
+                            Boomerang.images[i] = View.loadImage("../../img/boomerangs/" + i + ".png");
+                    }
+                    this.currImage = 0;
+                }
+
+                toString = () => "Boomerang (x, y) = (" + this.x + ", " + this.y + ")";
+
+                update() {
+                    // Move boomerang in direction of movement
+                    switch (this.direction) {
+                        case directions.UP:
+                            this.y -= this.speed;
+                            break;
+                        case directions.DOWN:
+                            this.y += this.speed;
+                            break;
+                        case directions.LEFT:
+                            this.x -= this.speed;
+                            break;
+                        case directions.RIGHT:
+                            this.x += this.speed;
+                            break;
+                    }
+
+                    // Cycle through boomerang images
+                    this.currImage = (this.currImage + 1) % 4;
+                    return true;
+                }
+
+                // Draw current boomerang image
+                draw(scroll_x, scroll_y) {
+                    View.context.drawImage(Boomerang.images[this.currImage], this.x - scroll_x, this.y - scroll_y)
+                }
+            }
+
+            class Pot extends Sprite {
+                static whole = undefined;
+                static broken = undefined;
+
+                constructor(x, y) {
+                    // Call Sprite constructor for setting pot's initial position, width, and height
+                    super(x, y, 48, 48);
+
+                    // Load pot images
+                    if (Pot.whole === undefined) Pot.whole = View.loadImage("../../img/pots/whole.png");
+                    if (Pot.broken === undefined) Pot.broken = View.loadImage("../../img/pots/broken.png");
+
+                    // Declare pot's speed, direction, whether it is broken, countdown for broken pot being displayed
+                    this.isBroken = false;
+                    this.direction = null;
+                    this.speed = 7.5;
+                    this.countdown = 75;
+                }
+
+                toString = () => "Pot (x, y) = (" + this.x + ", " + this.y + ")";
+
+                update() {
+                    if (this.direction !== null) {
+                        switch (this.direction) {
+                            case directions.UP:
+                                this.y -= this.speed;
+                                break;
+                            case directions.DOWN:
+                                this.y += this.speed;
+                                break;
+                            case directions.LEFT:
+                                this.x -= this.speed;
+                                break;
+                            case directions.RIGHT:
+                                this.x += this.speed;
+                                break;
+                        }
+                    }
+
+                    if (this.isBroken)
+                        this.countdown--;
+                    return !(this.countdown <= 0);
+                }
+
+                draw(scroll_x, scroll_y) {
+                    View.context.drawImage((this.isBroken) ? Pot.broken : Pot.whole, this.x - scroll_x, this.y - scroll_y);
+                }
+            }
+
+            class Controller {
+                static editMode = false;
+                static potOn = false;
+
+                constructor(model, view) {
+                    this.model = model;
+                    this.view = view;
+                    let self = this;
+
+                    // Add event listeners for mouse clicks and keyboard presses
+                    View.canvas.addEventListener('click', function(event) {
+                        self.onClick(event);
+                    }, false);
+                    document.addEventListener('keydown', function(event) {
+                        self.onKeyDown(event);
+                    }, false);
+                    document.addEventListener('keyup', function(event) {
+                        self.onKeyUp(event);
+                    }, false);
+                }
+
+                update() {
+                    // If in edit mode, do nothing
+                    if (Controller.editMode) return;
+
+                    // Save Link's previous position before updating movement
+                    this.model.link.savePrev();
+
+                    // Update Link's position and direction animation based on key presses
+                    if (this.keyUp) {
+                        this.model.link.y -= this.model.link.speed;
+                        this.model.link.cycleImage(directions.UP);
+                    } else if (this.keyDown) {
+                        this.model.link.y += this.model.link.speed;
+                        this.model.link.cycleImage(directions.DOWN);
+                    } else if (this.keyLeft) {
+                        this.model.link.x -= this.model.link.speed;
+                        this.model.link.cycleImage(directions.LEFT);
+                    } else if (this.keyRight) {
+                        this.model.link.x += this.model.link.speed;
+                        this.model.link.cycleImage(directions.RIGHT);
+                    }
+
+                    // If Link has moved to a new room, update scroll position
+                    if ((this.model.link.y + this.model.link.height / 2) < View.canvas.height
+                            && this.view.scroll_y > 0)
+                        this.view.scroll_y -= View.canvas.height;
+
+                    if ((this.model.link.y + this.model.link.height / 2) > View.canvas.height
+                            && this.view.scroll_y < View.canvas.height)
+                        this.view.scroll_y += View.canvas.height;
+
+                    if ((this.model.link.x + this.model.link.width / 2) < View.canvas.width
+                            && this.view.scroll_x > 0)
+                        this.view.scroll_x -= View.canvas.width;
+
+                    if ((this.model.link.x + this.model.link.width / 2) > View.canvas.width
+                            && this.view.scroll_x < View.canvas.width)
+                        this.view.scroll_x += View.canvas.width;
+                }
+
+                onKeyDown(event) {
+                    // If in edit mode, do nothing
+                    if (Controller.editMode) return;
+
+                    switch (event.key) {
+                        // Move Link in the direction of the arrow key
+                        // Set other key booleans to false to prevent diagonal movement
+                        case "ArrowUp":
+                            this.keyUp = true;
+                            this.keyDown = false;
+                            this.keyLeft = false;
+                            this.keyRight = false;
+                            break;
+                        case "ArrowDown":
+                            this.keyUp = false;
+                            this.keyDown = true;
+                            this.keyLeft = false;
+                            this.keyRight = false;
+                            break;
+                        case "ArrowLeft":
+                            this.keyUp = false;
+                            this.keyDown = false;
+                            this.keyLeft = true;
+                            this.keyRight = false;
+                            break;
+                        case "ArrowRight":
+                            this.keyUp = false;
+                            this.keyDown = false;
+                            this.keyLeft = false;
+                            this.keyRight = true;
+                            break;
+                    }
+                }
+
+                onKeyUp(event) {
+                    switch (event.key) {
+                        // Stop Link's movement in the direction of the arrow key
+                        case "ArrowUp":
+                            this.keyUp = false;
+                            this.model.link.isMoving = false;
+                            break;
+                        case "ArrowDown":
+                            this.keyDown = false;
+                            this.model.link.isMoving = false;
+                            break;
+                        case "ArrowLeft":
+                            this.keyLeft = false;
+                            this.model.link.isMoving = false;
+                            break;
+                        case "ArrowRight":
+                            this.keyRight = false;
+                            this.model.link.isMoving = false;
+                            break;
+
+                        // If in edit mode, scroll to top room
+                        case "w":
+                        case "W":
+                            if (Controller.editMode && this.view.scroll_y == View.canvasHeight)
+                                this.view.scroll_y -= View.canvasHeight;
+                            break;
+                        
+                        // If in edit mode, scroll to bottom room
+                        case "s":
+                        case "S":
+                            if (Controller.editMode && this.view.scroll_y == 0)
+                                this.view.scroll_y += View.canvasHeight;
+                            break;
+
+                        // If in edit mode, scroll to left room
+                        case "a":
+                        case "A":
+                            if (Controller.editMode && this.view.scroll_x == View.canvasWidth)
+                                this.view.scroll_x -= View.canvasWidth;
+                            break;
+
+                        // If in edit mode, scroll to right room
+                        case "d":
+                        case "D":
+                            if (Controller.editMode && this.view.scroll_x == 0)
+                                this.view.scroll_x += View.canvasWidth;
+                            break;
+
+                        // Toggle edit mode
+                        case "e":
+                        case "E":
+                            Controller.potOn = false;
+                            Controller.editMode = !Controller.editMode;
+                            break;
+                        
+                        // Toggle pot mode
+                        case "p":
+                        case "P":
+                            if (Controller.editMode)
+                                Controller.potOn = !Controller.potOn;
+                            break;
+
+                        // Throw boomerang if not in edit mode
+                        case "Control":
+                        case "b":
+                        case "B":
+                            if (!Controller.editMode)
+                                this.model.throwBoomerang();
+                            break;
+                    }
+                }
+
+                onClick(event) {
+                    // If not in edit mode, do nothing
+                    if (!Controller.editMode) return;
+
+                    // Get x and y coordinates of click, account for scroll position and canvas, snapping to grid
+                    let rect = View.canvas.getBoundingClientRect();
+                    let x = (event.clientX - rect.left + this.view.scroll_x) - (event.clientX  - rect.left + this.view.scroll_x) % 50;
+                    let y = (event.clientY - rect.top + this.view.scroll_y) - (event.clientY  - rect.top + this.view.scroll_y) % 50;
+
+                    // Get the x and y coordinates of the click
+                    this.model.onClick(x, y);
+                }
+            }
+
+            class Model {
+                constructor() {
+                    // Declare array of sprites, initialize Link, add to array
+                    this.sprites = [];
+                
+                    // Load locations of tiles into 2D array
+                    this.tileLocations = [
+                        [650, 0], [650, 50], [650, 350], [650, 450], [650, 400], [650, 300], [0, 450], [50, 450], [200, 450], [250, 450], [300, 450], [350, 450], [400, 450], [450, 450], [550, 450], [600, 450], [0, 400], [0, 350], [0, 300], [0, 250], [0, 200], [0, 150], [150, 0], [250, 0], [300, 0], [350, 0], [400, 0], [450, 0], [500, 0], [550, 0], [600, 0], [550, 50], [600, 50], [50, 500], [0, 500], [200, 500], [250, 500], [200, 0], [300, 500], [350, 500], [400, 500], [450, 500], [500, 500], [550, 500], [600, 500], [650, 500], [0, 550], [0, 600], [0, 650], [0, 700], [0, 750], [0, 850], [0, 900], [0, 950], [50, 950], [150, 950], [250, 950], [200, 950], [300, 950], [350, 950], [400, 950], [450, 950], [500, 950], [550, 950], [600, 950], [650, 950], [650, 900], [650, 750], [650, 550], [650, 700], [650, 250], [50, 750], [400, 600], [550, 800], [700, 550], [700, 500], [700, 700], [700, 750], [700, 900], [700, 950], [750, 950], [900, 950], [850, 950], [950, 950], [1000, 950], [1050, 950], [1100, 950], [1150, 950], [1200, 950], [1250, 950], [1300, 950], [1350, 950], [1350, 900], [1350, 800], [1350, 850], [1350, 750], [1350, 700], [1350, 650], [1350, 600], [1350, 550], [1350, 500], [750, 500], [800, 500], [850, 500], [900, 500], [950, 500], [1000, 500], [1050, 500], [750, 550], [700, 0], [700, 50], [700, 450], [700, 400], [700, 350], [700, 250], [750, 0], [850, 0], [900, 0], [800, 0], [950, 0], [1000, 0], [1100, 0], [1050, 0], [1200, 0], [1150, 0], [1250, 0], [1350, 0], [1300, 0], [1350, 50], [1350, 100], [1350, 150], [1350, 200], [1350, 250], [1350, 300], [1350, 350], [1350, 400], [1350, 450], [1300, 450], [1100, 450], [1050, 450], [950, 450], [1000, 450], [900, 450], [850, 450], [750, 50], [1100, 200], [1300, 300], [1300, 50], [900, 50], [750, 450], [800, 450], [700, 200], [650, 200], [1150, 450], [1300, 350], [1300, 250], [1300, 150], [1150, 500], [1300, 500], [700, 300], [750, 300], [750, 350], [750, 400], [350, 650], [300, 650], [1100, 500], [850, 50], [800, 950], [500, 450], [500, 50], [1050, 200], [600, 800], [600, 750], [1050, 400], [1100, 250], [950, 300], [1000, 350], [1000, 300], [1000, 250], [1150, 200], [800, 50], [50, 400], [450, 400], [400, 350], [550, 200], [600, 200], [350, 300], [200, 350], [250, 350], [550, 250], [600, 250], [600, 300], [50, 150], [1000, 650], [1000, 600], [300, 50], [350, 50], [0, 800], [50, 800], [350, 600], [350, 350], [350, 400], [300, 600], [250, 600], [300, 700], [350, 700], [400, 650], [300, 550], [50, 850], [650, 800], [650, 850], [600, 900], [550, 900], [500, 900], [600, 850], [550, 850], [450, 600], [450, 550], [400, 550], [350, 550], [250, 650], [450, 900], [400, 900], [150, 900], [100, 850], [700, 850], [700, 800], [750, 900], [750, 850], [750, 800], [800, 900], [850, 900], [900, 900], [800, 850], [850, 850], [1050, 600], [1100, 550], [1300, 700], [1300, 750], [1200, 850], [1300, 900], [1150, 900], [1050, 350], [400, 400], [300, 350], [300, 400], [250, 400], [500, 550], [950, 650], [1000, 750], [900, 650], [1000, 700], [950, 700], [1300, 800], [1300, 850], [1250, 850], [1200, 900], [1250, 900], [1050, 650], [1150, 550], [1050, 550], [100, 950], [100, 900], [50, 900], [0, 100], [50, 100], [0, 50], [0, 0], [50, 0], [100, 0], [50, 50], [100, 50], [1000, 400], [950, 350], [800, 400], [800, 350], [1050, 250], [300, 200], [250, 250], [300, 250], [250, 300], [1250, 800], [300, 300]
+                    ];
+                    // Load tile sprites into array
+                    // Tiles are split into 4 quadrants/rooms, each with a different color
+                    for (let i = 0; i < this.tileLocations.length; i++)
+                        this.sprites.push(new Tile(this.tileLocations[i][0], this.tileLocations[i][1]));
+
+                    // Load locations of pots into 2D array
+                    this.potLocations = [
+                        [450, 150], [450, 300], [100, 250], [250, 800], [850, 600], [1150, 100], [850, 250], [900, 100], [1150, 350], [100, 650], [500, 650], [1250, 600], [950, 800], [1150, 750], [400, 800]
+                    ];
+                    // Load Pot sprites into array
+                    for (let i = 0; i < this.potLocations.length; i++)
+                        this.sprites.push(new Pot(this.potLocations[i][0], this.potLocations[i][1]));
+
+                    // Add Link reference to array of sprites
+                    this.link = new Link();
+                    this.sprites.push(this.link);
+                }
+
+                update() {
+                    // If currently in edit mode, do nothing
+                    if (Controller.editMode) return;
+
+                    // Collision behavior
+                    for (let sprite1 of this.sprites) {
+                        // Update sprites; if a sprite needs to be removed, remove it from the array
+                        // and move on to next sprite
+                        if (!sprite1.update()) {
+                            this.sprites.splice(this.sprites.indexOf(sprite1), 1);
+                            continue;
+                        }
+
+                        for (let sprite2 of this.sprites) {
+                            // If the two sprites are the same, skip to the next sprite
+                            if (sprite1 === sprite2) continue;
+
+                            // If the two sprites are colliding, perform behavior and break from inner loop
+                            if (this.isColliding(sprite1, sprite2)) {
+                                // If Link is colliding with a tile, stop Link from moving
+                                if (sprite1 instanceof Link && sprite2 instanceof Tile)
+                                    sprite1.stopColliding(sprite2);
+
+                                if (sprite1 instanceof Tile && sprite2 instanceof Link)
+                                    sprite2.stopColliding(sprite1);
+
+                                // If Link is colliding with a pot that isn't already broken, begin sliding the pot
+                                if ((sprite1 instanceof Link && sprite2 instanceof Pot) && !sprite2.isBroken)
+                                    sprite2.direction = this.link.direction;
+
+                                if ((sprite1 instanceof Pot && sprite2 instanceof Link) && !sprite1.isBroken)
+                                    sprite1.direction = this.link.direction;
+                                
+                                // If a boomerang collides with a pot, remove the boomerang and break the pot
+                                if (sprite1 instanceof Boomerang && sprite2 instanceof Pot) {
+                                    if (!sprite2.isBroken)
+                                        this.sprites.splice(this.sprites.indexOf(sprite1), 1);
+                                    sprite2.isBroken = true;
+                                }
+
+                                // If a boomerang collides with a tile, remove the boomerang
+                                if (sprite1 instanceof Boomerang && sprite2 instanceof Tile)
+                                    this.sprites.splice(this.sprites.indexOf(sprite1), 1);
+
+                                // If a pot collides with a tile, break the pot and stp it from moving
+                                if (sprite1 instanceof Pot && sprite2 instanceof Tile) {
+                                    sprite1.isBroken = true;
+                                    sprite1.direction = null;
+                                }
+
+                                // If two pots collide, break both pots and stop them from moving
+                                if (sprite1 instanceof Pot && sprite2 instanceof Pot) {
+                                    sprite1.isBroken = true;
+                                    sprite2.isBroken = true;
+                                    sprite1.direction = null;
+                                    sprite2.direction = null;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                onClick(x, y) {
+                    // For each sprite in the array, if a sprite is clicked on and is a pot or tile, remove it from the array
+                    // If Link was clicked on, don't remove any sprites or add any sprites; leave the function entirely
+                    for (let sprite of this.sprites) {
+                        if (!(sprite instanceof Link)) {
+                            if (sprite.isClicked(x, y)) {
+                                if ((sprite instanceof Pot && Controller.potOn) || (sprite instanceof Tile && !Controller.potOn))
+                                    this.sprites.splice(this.sprites.indexOf(sprite), 1);
+                                return;
+                            }
+                        } else {
+                            if (this.isColliding(this.link, {x: x, y: y, width: 50, height: 50}))
+                                return;
+                        }
+                    }
+
+                    // If no pots/tiles were clicked on, add a new pot/tile to the array based on state of potOn
+                    this.sprites.unshift((Controller.potOn) ? new Pot(x, y) : new Tile(x, y));
+                }
+
+                // Check if two sprites are colliding
+                isColliding(sprite1, sprite2) {
+                    return !(sprite1.x + sprite1.width < sprite2.x
+                            || sprite1.x > sprite2.width + sprite2.x
+                            || sprite1.y + sprite1.height < sprite2.y
+                            || sprite1.y + (sprite1.height / 2) > sprite2.height + sprite2.y);
+                }
+
+                // Instantiate a new Boomerang object and add it to the sprites array
+                throwBoomerang() {
+                    this.sprites.push(new Boomerang((this.link.x + this.link.width / 2), (this.link.y + this.link.height / 2), this.link.direction));
+                }
+            }
+            
+            class View {
+                // Add static variables for referencing canvas width/height
+                static canvas = document.getElementById("window");
+                static context = View.canvas.getContext("2d");
+                static canvasWidth = View.canvas.width;
+                static canvasHeight = View.canvas.height;
+                
+                constructor(model, update) {
+                    // Make view.update() indirectly call view.draw()
+                    this.update = update;
+                    this.model = model;
+
+                    // Declare window scroll variables
+                    this.scroll_x = 0;
+                    this.scroll_y = 0;   
+                }
+
+                draw() {
+                    // Clear canvas
+                    View.context.clearRect(0, 0, View.canvasWidth, View.canvasHeight);
+
+                    // Draw different colors to each quadrant/room of the canvas
+                    let colors = [];
+                    switch (this.scroll_x + this.scroll_y) {
+                        case 0: colors.push("#beffc8", "#167442", "#92dca7", "green"); break; // Top left room, green
+                        case 700: colors.push("#ffc1be", "#741e16", "#df877b", "red"); break; // Top right room, red
+                        case 500: colors.push("#e1beff", "#691674", "#d68cea", "purple"); break; // Bottom left room, purple
+                        case 1200: colors.push("#bef9ff", "#166a74", "#81e3f0", "cyan"); break; // Bottom right room, cyan
+                    }
+                    document.body.style.backgroundImage = "linear-gradient(to top left, " + colors[0] + ", " + colors[1] + ")";
+                    View.context.fillStyle = colors[2];
+                    View.context.fillRect(0, 0, View.canvas.width, View.canvas.height);
+
+                    // Draw each sprite in array
+                    this.model.sprites.forEach(sprite => {
+                        sprite.draw(this.scroll_x, this.scroll_y);
+                    });
+
+                    // If edit mode is on, display indicating text along with image of what's currently being placed/removed
+                    if (Controller.editMode) {
+                        if (Controller.potOn) {
+                            document.getElementById("placing_image").src = "../../img/pots/whole.png";
+                            document.getElementById("edit_text").innerHTML = "edit mode enabled: place/remove pots";
+                        } else {
+                            document.getElementById("placing_image").src = "../../img/tiles/" + colors[3] + ".jpg";
+                            document.getElementById("edit_text").innerHTML = "edit mode enabled: place/remove tiles";
+                        }
+                    } else {
+                        document.getElementById("placing_image").src = "";
+                        document.getElementById("edit_text").innerHTML = "";
+                    }
+                }
+
+                // Load given image file and return it
+                static loadImage(filepath) {
+                    let image = new Image();
+                    image.src = filepath;
+                    return image;
+                }
+            }
+
+            class Game {
+                constructor() {
+                    // Create model, view, and controller
+                    this.model = new Model();
+                    this.view = new View(this.model, View.prototype.draw);
+                    this.controller = new Controller(this.model, this.view);
+                }
+
+                onTimer() {
+                    // Update model and view
+                    this.controller.update();
+                    this.model.update();
+                    this.view.update();
+                }
+            }
+
+            // Create game object and start timer
+            let game = new Game();
+            let timer = setInterval(function() {
+                game.onTimer();
+            }, 40);
+        </script>
+    </body>
+</html>
