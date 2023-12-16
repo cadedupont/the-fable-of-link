@@ -1,9 +1,8 @@
 # The Fable of Link
-A labyrinth-style game written in Java.
+A labyrinth-style game written in Java. Below are instructions on how to install and run the game on your local machine using Java. You can also play the game written in JavaScript [here](http://csce.uark.edu/~cldupont/the-fable-of-link/).
 
----
-
-### To run<br>
+### To run
+----
 The following files are included in the `scripts` folder to run the game:<br>
 `build.sh` <b>for MacOS/Linux</b><br>
 `build.bat` <b>for Windows</b><br>
@@ -26,9 +25,8 @@ and begin playing the game. Compiled class files will be placed in the `bin` fol
 
 If neither script is used to run the game, a default window size will be provided automatically.<br>
 
+### Controls
 ---
-
-### Controls<br>
 While in regular mode:<br>
 [Arrow Keys]: Move Link<br>
 [Ctrl] or [B]: Throw boomerang<br>
@@ -47,23 +45,8 @@ Throw a boomerang at a pot to break the pot in its place.<br>
 Slide a pot into another pot to break both pots.<br>
 Broken pots will be removed from the screen after a short period of time.
 
+### Screenshots
 ---
-
-### The `extra` folder
-The `extra` folder contains ports of the Zelda game written in both JavaScript and Python.
-
-The `js` folder contains both a `Game.html` file and a `json-to-txt` folder. To run the game in JavaScript, simply open the `Game.html` file in your favorite browser. The `json-to-txt` folder contains a C++ program written to parse the `map.json` file into a 2D array of sprites. This was the preffered method as opposed parsing the `map.json` file directly.
-
-The `python` folder contains a `game.py` file and a `requirements.txt` file. Before running Python script, you'll need to install necessary dependencies using `pip`:
-
-`pip install -r requirements.txt`
-
-Then, run the Python script in your terminal:
-
-`python game.py`
-
----
-
 <p align='center'>
     <img width="812" alt="green_play" src="https://github.com/cadedupont/zelda-game/assets/98860495/b4b39bac-3730-4428-824f-160a5794f0e2">
     <img width="812" alt="blue_play" src="https://github.com/cadedupont/zelda-game/assets/98860495/730a4bb4-0d20-4173-8fae-756af70e765d">

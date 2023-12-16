@@ -77,6 +77,12 @@ public class Model {
 						((Pot)sprite1).sliding = null;
 						((Pot)sprite2).sliding = null;
 					}
+
+					// If a boomerang is colliding with Link, remove the boomerang from the list of sprites
+					if (sprite1.isBoomerang() && sprite2.isLink() && ((Boomerang)sprite1).updateCount >= 15)
+						it.remove();
+
+					// Collision has been detected, break out of inner loop
 					break;
 				}
 			}

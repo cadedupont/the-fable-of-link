@@ -12,17 +12,19 @@ public class Boomerang extends Sprite {
     int currImage = 0;
 
     // Store boomerang movement speed, direction boomerang is moving
-    final double speed = 7.5;
+    double speed = 7.5;
+    int updateCount = 0;
+    boolean returning = false;
     Direction dirThrown;
 
     // Constructor used when user presses either control or 'b' to create new
     // boomerang object
-    public Boomerang(int x, int y, Direction dir) {
+    public Boomerang(int x, int y, Direction direction) {
         this.x = x;
         this.y = y;
-        this.dirThrown = dir;
         this.width = 10;
         this.height = 10;
+        this.dirThrown = direction;
 
         if (images == null) {
             images = new Image[MAX_IMAGES];
@@ -47,14 +49,54 @@ public class Boomerang extends Sprite {
     // Move boomerang in the direction it's been thrown, cycle through images for
     // animating boomerang movement
     public boolean update() {
+        // Calculate a curve factor using a sine function
+        double curveFactor = Math.sin(updateCount / 30.0 * Math.PI * 2);
+        
+        // Move boomerang in the direction it's been thrown, add curvature to movement
         switch (dirThrown) {
-            case UP -> y -= speed;
-            case DOWN -> y += speed;
-            case LEFT -> x -= speed;
-            case RIGHT -> x += speed;
+            case UP:
+                y -= speed;
+                x += curveFactor * speed;
+                break;
+            case DOWN:
+                y += speed;
+                x += curveFactor * speed;
+                break;
+            case LEFT:
+                x -= speed;
+                y += curveFactor * speed;
+                break;
+            case RIGHT:
+                x += speed;
+                y += curveFactor * speed;
+                break;
         }
 
+        // Increment current image index and update count
         currImage = (currImage + 1) % MAX_IMAGES;
+        updateCount++;
+
+        // Cut speed in half when boomerang is returning
+        speed = (updateCount >= 25 && !returning || updateCount <= 5 && returning) ? 3.75 : 7.5;
+
+        if (updateCount >= 30 && !returning) {
+            updateCount = 0;
+            returning = true;
+            switch (dirThrown) {
+                case UP:
+                    dirThrown = Direction.DOWN;
+                    break;
+                case DOWN:
+                    dirThrown = Direction.UP;
+                    break;
+                case LEFT:
+                    dirThrown = Direction.RIGHT;
+                    break;
+                case RIGHT:
+                    dirThrown = Direction.LEFT;
+                    break;
+            }
+        }
         return true;
     }
 

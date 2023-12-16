@@ -1,12 +1,13 @@
 :: @echo off
 
-:: Compile Java files in src folder
-javac ../src/*.java -d ../bin
+:: Set width and height of game window
+set WIDTH=716
+set HEIGHT=539
 
-:: If compilation was successful, run the program inside bin folder with given arguments for window size
+:: Attempt to compile game
+javac -d bin src/*.java
+
+:: If compilation fails, exit, otherwise run game
 if %ERRORLEVEL% EQU 0 (
-	echo "Compilation successful; running game."
-	java -cp bin Game 716 539
-) else (
-	echo "Compilation failed; exiting now."
+	java -cp bin Game %WIDTH% %HEIGHT%
 )
