@@ -7,7 +7,7 @@ import java.awt.Image;
 
 public class Boomerang extends Sprite {
     // Store boomerang images
-    public static Image[] images;
+    static Image[] images;
     final int MAX_IMAGES = 4;
     int currImage = 0;
 
@@ -105,7 +105,7 @@ public class Boomerang extends Sprite {
         g.drawImage(images[currImage], this.x - scroll_x, this.y - scroll_y, null);
     }
 
-    // Marshal boomerang cldupont information into Json object; not used
+    // Marshal boomerang information into Json object; not used
     public Json marshal() {
         Json ob = Json.newObject();
         ob.add("boomerang_x", x);

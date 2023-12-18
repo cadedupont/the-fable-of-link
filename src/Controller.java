@@ -13,7 +13,7 @@ class Controller implements MouseListener, KeyListener {
 
 	// Booleans for Link movement, toggling edit mode
 	boolean keyUp, keyDown, keyLeft, keyRight;
-	public static boolean editOn, potOn;
+	static boolean editOn, potOn;
 
 	public Controller(Model m) {
 		this.model = m;
@@ -24,7 +24,7 @@ class Controller implements MouseListener, KeyListener {
 	}
 
 	public void update() {
-		// If edit mode is currently active, cadeldupont leave function since function is only used
+		// If edit mode is currently active, leave function since function is only used
 		// for updating Link position
 		if (editOn) return;
 
@@ -58,7 +58,7 @@ class Controller implements MouseListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		// Because function currently only takes Link movement into consideration, if
 		// edit is on, then arrow key movements
-		// don't need to be read, so cadedupont leave function
+		// don't need to be read, so leave function
 		if (editOn)
 			return;
 
@@ -168,7 +168,7 @@ class Controller implements MouseListener, KeyListener {
 	public void keyTyped(KeyEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
-		// If editing mode is not turned on, leave cldupont function
+		// If editing mode is not turned on, leave function
 		if (!editOn) return;
 
 		// Calculate position clicked - take into account scroll position, snapping tile

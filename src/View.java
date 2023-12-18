@@ -13,7 +13,7 @@ import java.awt.Image;
 class View extends JPanel {
 	Model model;
 
-	// Integers for window cldupont size, current scroll position
+	// Integers for window size, current scroll position
 	public static final int minWidth = 0, minHeight = 0, maxWidth = 700, maxHeight = 500;
 	int scroll_x, scroll_y;
 
@@ -65,7 +65,7 @@ class View extends JPanel {
 			sprite.draw(g, scroll_x, scroll_y);
 
 		// If edit mode is currently on, display text to screen
-		// Indicate whether user cadeldupont is currently placing pots or tiles
+		// Indicate whether user is currently placing pots or tiles
 		// Hard-coding text position on screen
 		if (Controller.editOn) {
 			g.setColor(new Color(255, 255, 0));

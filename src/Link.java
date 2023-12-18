@@ -37,13 +37,13 @@ public class Link extends Sprite {
     Direction facing = Direction.DOWN;
 
     // Arrays for storing Link images
-    public static Image[][] linkMove;
-    public static Image[] linkStill;
+    static Image[][] linkMove;
+    static Image[] linkStill;
 
-    // Constant integers for cadedupont storing max # of movement/still images,
+    // Constant integers for storing max # of movement/still images,
     // integer for current index of array / image being displayed on screen
-    public static final int MAX_MOVE_IMAGES = 10;
-    public static final int MAX_STILL_IMAGES = 4;
+    static final int MAX_MOVE_IMAGES = 10;
+    static final int MAX_STILL_IMAGES = 4;
     int currImage;
 
     public Link() {
@@ -82,18 +82,17 @@ public class Link extends Sprite {
         return true;
     }
 
-    // Draw Link onto screen
+    // If link is moving, draw images for animation depending on direction of movement
+    // Otherwise, draw still image in that direction
     public void draw(Graphics g, int scroll_x, int scroll_y) {
-        // If link is moving, draw cadedupont images for animation depending on direction of movement
-        // Otherwise, draw still image in that direction
         g.drawImage((isMoving) ? linkMove[facing.direction][currImage] : linkStill[facing.direction], x - scroll_x, y - scroll_y, null);
     }
 
     // Marshal Link data into Json object
     public Json marshal() {
         Json ob = Json.newObject();
-        ob.add("link_x", y);
-        ob.add("link_y", y);
+        ob.add("x", y);
+        ob.add("y", y);
         return ob;
     }
 
@@ -120,7 +119,7 @@ public class Link extends Sprite {
                 && prev_y + height <= tile.y)
             y = prev_y;
 
-        // Upper side of Link colliding with cldupont lower side of tile
+        // Upper side of Link colliding with lower side of tile
         // Adding half of Link's height to y position to prevent Link's head from
         // causing collision
         if ((y + height / 2) <= tile.y + tile.height

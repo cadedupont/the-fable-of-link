@@ -6,20 +6,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 public class Pot extends Sprite {
-    // Store pot images
-    public static Image broken, whole;
+    // Pot images and states
+    static Image broken, whole;
+    boolean isBroken;
+    Direction sliding;
 
-    // Boolean to determine whether the pot's been collided with
-    public boolean isBroken;
-
-    // Direction pot will slide if cldupont Link collided with it
-    public Direction sliding;
-
-    // Countdown for displaying broken pot image before removing it
-    public int countdown = 75;
-
-    // Speed of pot's movement
-    public double speed = 7.5;
+    // Countdown for how long the pot will remain on the screen after being broken, speed of pot movement
+    int countdown = 75;
+    double speed = 7.5;
 
     // Constructor used if user clicks on screen with edit and pot mode enabled
     public Pot(int x, int y) {
@@ -28,20 +22,24 @@ public class Pot extends Sprite {
         this.width = 48;
         this.height = 48;
 
-        if (broken == null) broken = View.loadImage("img/pots/broken.png");
-        if (whole == null) whole = View.loadImage("img/pots/whole.png");
+        if (broken == null)
+            broken = View.loadImage("img/pots/broken.png");
+        if (whole == null)
+            whole = View.loadImage("img/pots/whole.png");
     }
 
     // Unmarshalling constructor; loads pot locations from JSON file and loads pot
     // images if they haven't been loaded yet
     public Pot(Json ob) {
-        this.x = (int) ob.getLong("pot_x");
-        this.y = (int) ob.getLong("pot_y");
+        this.x = (int) ob.getLong("x");
+        this.y = (int) ob.getLong("y");
         this.width = 48;
         this.height = 48;
 
-        if (broken == null) broken = View.loadImage("img/pots/broken.png");
-        if (whole == null) whole = View.loadImage("img/pots/whole.png");
+        if (broken == null)
+            broken = View.loadImage("img/pots/broken.png");
+        if (whole == null)
+            whole = View.loadImage("img/pots/whole.png");
     }
 
     // Return pot information
@@ -79,7 +77,7 @@ public class Pot extends Sprite {
 
         if (isBroken)
             countdown--;
-        return !(countdown <= 0);
+        return countdown > 0;
     }
 
     // Draw pot image to the screen; if the pot is broken, display the broken pot
@@ -91,8 +89,8 @@ public class Pot extends Sprite {
     // Marshal pot object information into a Json object
     public Json marshal() {
         Json ob = Json.newObject();
-        ob.add("pot_x", x);
-        ob.add("pot_y", y);
+        ob.add("x", x);
+        ob.add("y", y);
         return ob;
     }
 }
