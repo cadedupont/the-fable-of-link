@@ -1,8 +1,10 @@
 # The Fable of Link
-A labyrinth-style game written in Java. Below are instructions on how to install and run the game on your local machine using Java. You can also play the game written in JavaScript [here](http://csce.uark.edu/~cldupont/the-fable-of-link/).
+A labyrinth-style game written in Java. Below are instructions on how to install and run the game on your local machine using Java. If you don't have Java installed on your machine, you can play an alternate version of the game written in JavaScript [here](http://csce.uark.edu/~cldupont/the-fable-of-link/).
 
-### To run
-----
+## To run
+Clone this repository to your local machine by running the following command in your computer's terminal:<br>
+`https://github.com/cadedupont/the-fable-of-link.git`
+
 The following files are included in the `scripts` folder to run the game:<br>
 `build.sh` <b>for MacOS/Linux</b><br>
 `build.bat` <b>for Windows</b><br>
@@ -25,28 +27,26 @@ and begin playing the game. Compiled class files will be placed in the `bin` fol
 
 If neither script is used to run the game, a default window size will be provided automatically.<br>
 
-### Controls
----
+## Controls
 While in regular mode:<br>
-[Arrow Keys]: Move Link<br>
-[Ctrl] or [B]: Throw boomerang<br>
-[S]: Save current tile/pot map<br>
-[L]: Load tile/pot map saved in map.json file<br>
-[E]: Toggle edit mode
+`<Arrow Keys>` - Move Link<br>
+`<Ctrl>` or `<B>` - Throw boomerang<br>
+`<S>` - Save current tile/pot map<br>
+`<L>` - Load tile/pot map saved in map.json file<br>
+`<E>` - Toggle edit mode
 
 While in edit mode:<br>
-[Click]: Add/remove tiles<br>
-    &emsp;- click on empty space to add a tile<br>
-    &emsp;- click on tile to remove tile<br>
-[P]: Toggle placing either tiles or pots
+`<Click>` - Add/remove tiles<br>
+    &emsp;- Click on empty space to add a tile<br>
+    &emsp;- Click on tile to remove tile<br>
+`<P>` - Toggle placing either tiles or pots
 
 Run into pots to slide them across the room into a wall.<br>
 Throw a boomerang at a pot to break the pot in its place.<br>
 Slide a pot into another pot to break both pots.<br>
 Broken pots will be removed from the screen after a short period of time.
 
-### Screenshots
----
+## Screenshots
 <p align='center'>
     <img width="812" alt="green_play" src="https://github.com/cadedupont/zelda-game/assets/98860495/b4b39bac-3730-4428-824f-160a5794f0e2">
     <img width="812" alt="blue_play" src="https://github.com/cadedupont/zelda-game/assets/98860495/730a4bb4-0d20-4173-8fae-756af70e765d">
