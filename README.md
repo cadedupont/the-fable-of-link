@@ -1,5 +1,5 @@
 # The Fable of Link
-A labyrinth-style game written in Java. Below are instructions on how to install and run the game on your local machine using Java. If you don't have Java installed on your machine, you can play an alternate version of the game written in JavaScript [here](http://csce.uark.edu/~cldupont/the-fable-of-link/).
+A labyrinth-style game written in Java. Below are instructions on how to install and run the game on your local machine using Java.
 
 ## To run
 Clone this repository to your local machine by running the following command in your computer's terminal:<br>
