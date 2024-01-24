@@ -3,7 +3,7 @@ A labyrinth-style game written in Java. Below are instructions on how to install
 
 ## To run
 Clone this repository to your local machine by running the following command in your computer's terminal:<br>
-`https://github.com/cadedupont/the-fable-of-link.git`
+`git clone https://github.com/cadedupont/the-fable-of-link.git`
 
 The following files are included in the `scripts` folder to run the game:<br>
 `build.sh` <b>for MacOS/Linux</b><br>
