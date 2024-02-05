@@ -52,22 +52,22 @@ If neither script is used to run the game, a default window size will be provide
 
 ## Controls
 
-While in regular mode:
-`<Arrow Keys>` - Move Link
-`<Ctrl>` or `<B>` - Throw boomerang
-`<S>` - Save current tile/pot map
-`<L>` - Load tile/pot map saved in map.json file
+While in regular mode:<br>
+`<Arrow Keys>` - Move Link<br>
+`<Ctrl>` or `<B>` - Throw boomerang<br>
+`<S>` - Save current tile/pot map<br>
+`<L>` - Load tile/pot map saved in map.json file<br>
 `<E>` - Toggle edit mode
 
-While in edit mode:
-`<Click>` - Add/remove tiles
-    &emsp;- Click on empty space to add a tile
-    &emsp;- Click on tile to remove tile
+While in edit mode:<br>
+`<Click>` - Add/remove tiles<br>
+    &emsp;- Click on empty space to add a tile<br>
+    &emsp;- Click on tile to remove tile<br>
 `<P>` - Toggle placing either tiles or pots
 
-Run into pots to slide them across the room into a wall.
-Throw a boomerang at a pot to break the pot in its place.
-Slide a pot into another pot to break both pots.
+Run into pots to slide them across the room into a wall.<br>
+Throw a boomerang at a pot to break the pot in its place.<br>
+Slide a pot into another pot to break both pots.<br>
 Broken pots will be removed from the screen after a short period of time.
 
 ## Screenshots
