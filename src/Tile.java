@@ -18,13 +18,13 @@ public class Tile extends Sprite {
 
         // Lazy loading for tile images
         if (greenTile == null)
-            greenTile = View.loadImage("img/tiles/green.jpg");
+            greenTile = View.loadImage("images/tiles/green.jpg");
         if (redTile == null)
-            redTile = View.loadImage("img/tiles/red.jpg");
+            redTile = View.loadImage("images/tiles/red.jpg");
         if (purpleTile == null)
-            purpleTile = View.loadImage("img/tiles/purple.jpg");
+            purpleTile = View.loadImage("images/tiles/purple.jpg");
         if (cyanTile == null)
-            cyanTile = View.loadImage("img/tiles/cyan.jpg");
+            cyanTile = View.loadImage("images/tiles/cyan.jpg");
     }
 
     // Load data from Json file, set attributes of current tile
@@ -36,13 +36,13 @@ public class Tile extends Sprite {
 
         // Lazy loading for tile images
         if (greenTile == null)
-            greenTile = View.loadImage("img/tiles/green.jpg");
+            greenTile = View.loadImage("images/tiles/green.jpg");
         if (redTile == null)
-            redTile = View.loadImage("img/tiles/red.jpg");
+            redTile = View.loadImage("images/tiles/red.jpg");
         if (purpleTile == null)
-            purpleTile = View.loadImage("img/tiles/purple.jpg");
+            purpleTile = View.loadImage("images/tiles/purple.jpg");
         if (cyanTile == null)
-            cyanTile = View.loadImage("img/tiles/cyan.jpg");
+            cyanTile = View.loadImage("images/tiles/cyan.jpg");
     }
 
     // Print tile information

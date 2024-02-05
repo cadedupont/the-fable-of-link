@@ -56,13 +56,13 @@ public class Link extends Sprite {
         if (linkStill == null || linkMove == null) {
             linkStill = new Image[MAX_STILL_IMAGES];
             for (int i = 0; i < linkStill.length; i++)
-                linkStill[i] = View.loadImage("img/link/still/" + i + ".png");
+                linkStill[i] = View.loadImage("images/link/still/" + i + ".png");
 
             // Using nested for loop for sorting different direction images into columns
             linkMove = new Image[Direction.values().length][MAX_MOVE_IMAGES];
             for (int i = 0; i < linkMove.length; i++)
                 for (int j = 0; j < linkMove[i].length; j++)
-                    linkMove[i][j] = View.loadImage("img/link/" + Direction.values()[i].toString() + "/" + j + ".png");
+                    linkMove[i][j] = View.loadImage("images/link/" + Direction.values()[i].toString() + "/" + j + ".png");
         }
     }
 
